@@ -1,3 +1,4 @@
+
 # 
 #
 #
@@ -9,6 +10,7 @@
 #
 #
 #
+
 
 import pygame, sys, random
 from pygame.locals import *
@@ -50,4 +52,5 @@ while True:
                     exec(loja.read())
                      
     pygame.display.update() 
+
     clock.tick(60)
