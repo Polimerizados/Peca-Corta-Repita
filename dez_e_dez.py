@@ -1,3 +1,15 @@
+# 
+#
+#
+#
+#
+# APERTE ESPAÇO DUAS VEZES PARA INICIAR DENTRO DA EXECUÇÃO
+#
+#
+#
+#
+#
+
 import pygame, sys, random
 from pygame.locals import *
 
@@ -9,7 +21,7 @@ pygame.display.set_caption("pspspspspspspsps")
 window_width = int(pygame.display.Info().current_w) # 1280
 window_height = int(pygame.display.Info().current_h) # 800
 screen = pygame.display.set_mode((window_width, window_height))
-background = pygame.Surface((window_width, window_height))
+background = pygame.Surface((window_width, window_height)) 
 main_menu = pygame.Surface((window_width, window_height))
 screen.fill(pygame.Color(0, 0, 0))
 background.fill(pygame.Color(255, 255, 255))
@@ -36,6 +48,6 @@ while True:
             if event.key == K_l:
                 with open("Particoes/loja.py") as loja:
                     exec(loja.read())
-
-    pygame.display.update()
+                     
+    pygame.display.update() 
     clock.tick(60)
