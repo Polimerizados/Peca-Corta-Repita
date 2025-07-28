@@ -24,7 +24,7 @@ primer_sel = (pygame.image.load("Imagens/primer_pareado_teste.png"), 0, 0, 0)
 """ Meta """
 polimerase_sel_img = pygame.transform.scale(polimerase_sel[0], (200, 280)) 
 primer_sel_img = pygame.transform.scale(primer_sel[0], (500, 200))
-nucleotideos_fita = [dNTP(dificuldade, "up", "random", (160+100*i, window_height-150)) for i in range(12)]
+nucleotideos_fita = [dNTP(dificuldade, "up", "random", (160+100*i, window_height-160)) for i in range(12)]
 contra_fita = [0] * 12
 ########### WHILE ############
 clicado_index = ""
@@ -89,8 +89,8 @@ while running:
             diff_y = -1
             if isinstance(clicado_index, int):   
                 pareante = nucleotideos_fita[contra_fita.index(0)] 
-                if pygame.mouse.get_pos()[0] in range(pareante.pos[0]-80, pareante.pos[0]+100):
-                    if pygame.mouse.get_pos()[1] in range(pareante.pos[1], pareante.pos[1]+80):
+                if pygame.mouse.get_pos()[0] in range(pareante.pos[0], pareante.pos[0]+80):
+                    if pygame.mouse.get_pos()[1] in range(pareante.pos[1]-80, pareante.pos[1]+100):
                         contra_fita[contra_fita.index(0)] = dNTP(
                             dificuldade,
                             "down",
