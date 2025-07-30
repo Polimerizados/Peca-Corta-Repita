@@ -30,6 +30,18 @@ background.fill(pygame.Color(255, 255, 255))
 main_menu.fill(pygame.Color(0, 255, 0)) 
 main_menu.set_alpha(50)
 
+########### Pontos Globais ############
+
+def salvar_pontuacao(pontos):
+    with open("pontuacao.txt", "w") as f:
+        f.write(str(pontos))
+
+def carregar_pontuacao():
+    if os.path.exists("pontuacao.txt"):
+        with open("pontuacao.txt", "r") as f:
+            return int(f.read())
+    return 0
+
 ########### WHILE ############
 while True:
 

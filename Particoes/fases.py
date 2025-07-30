@@ -2,6 +2,7 @@ import pygame, sys, random, os
 from pygame.locals import *
 sys.path.append(os.path.abspath(".."))
 from dez_e_dez import window_width, window_height, clock, screen
+from Particoes.utils import salvar_pontuacao, carregar_pontuacao
 sys.path.append(os.path.abspath("Particoes"))
 from classes import dNTP
 
@@ -26,10 +27,17 @@ polimerase_sel_img = pygame.transform.scale(polimerase_sel[0], (200, 280))
 primer_sel_img = pygame.transform.scale(primer_sel[0], (500, 200))
 nucleotideos_fita = [dNTP(dificuldade, "up", "random", (160+100*i, window_height-160)) for i in range(12)]
 contra_fita = [0] * 12
+
 ########### WHILE ############
 clicado_index = ""
 ticking = 60
 running = True
+
+# REMOVER DEPOIS - APENAS PARA TESTES #
+pygame.font.init()
+pontuacao_global = carregar_pontuacao()
+fonte = pygame.font.SysFont("Segoe UI", 48)
+# REMOVER DEPOIS - APENAS PARA TESTES #
 
 while running:
     # Para diferenciar passagens de tempo
@@ -41,6 +49,11 @@ while running:
     # Redesenha o background puro
     screen.blit(background, (0, 0))
     midground.fill((0, 0, 0, 0))
+
+    # REMOVER DEPOIS - APENAS PARA TESTES
+    texto_amino = fonte.render(f"pnts: {pontuacao_global}", True, (0, 0, 0))
+    screen.blit(texto_amino, (20, 20))
+    # REMOVER DEPOIS - APENAS PARA TESTES #
 
     ### MIDGROUND
     # Atualiza as posições de tempo em tempo, sob o mouse ou aleatoriamente
@@ -99,6 +112,8 @@ while running:
                         )
                         dNTPs_livres.pop(clicado_index)
                         dNTPs_livres.append(dNTP(dificuldade, "down"))
+                        pontuacao_global += 1
+                        salvar_pontuacao(pontuacao_global)
             clicado_index = ""
 
         # Se o usuário quiser sair, só, só
