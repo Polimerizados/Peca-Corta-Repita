@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.cpython-*.pyc
+*.cpython-*.pyo
+pontuacao.txt
