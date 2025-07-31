@@ -126,6 +126,10 @@ def rodar_fase(dificuldade, screen, clock):
                                 dNTPs_livres[clicado_index].base,
                                 (dNTPs_livres[clicado_index].pos[0],window_height-240)
                             )
+                            lista_ligH[lista_ligH.index(0)] = ligH(
+                                nucleotideos_fita[lista_ligH.index(0)],
+                                contra_fita[lista_ligH.index(0)]
+                            )
                             dNTPs_livres.pop(clicado_index)
                             dNTPs_livres.append(dNTP(dificuldade, "down"))
                             pontuacao_global += 1
