@@ -65,13 +65,13 @@ class ligH:
         elif self.base == "C" and self.base_par == "G":
             self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_CG.png"), (100, 150)) 
         elif self.base == "G" and self.base_par == "C":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_GC.png"), (100, 150)) 
+            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_GC.png"), (100, 150))
         
 class dP:
-    def __init__(self, level, tipo):
+    def __init__(self, level, tipo, up_down):
         self.level = level
         self.tipo = tipo
-        self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_dP_{tipo}.png"), (100, 80)) 
+        self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_dP_{tipo}_{up_down}.png"), (100, 80)) 
 
 class bolinhas:
     def __init__(self):
