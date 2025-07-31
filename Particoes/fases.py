@@ -72,7 +72,8 @@ def rodar_fase(dificuldade, screen, clock):
         pygame.draw.rect(foreground, "aqua", ((0, window_height-230), (160, 40)))
         for i in range(12):
             foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-190))
-            foreground.blit(dP_fita[i].img, (160+100*i, window_height-110))
+            if dificuldade == "m":
+                foreground.blit(dP_fita[i].img, (160+100*i, window_height-110))
             if contra_fita[i] == 0:
                 continue
             pygame.draw.rect(foreground, "aqua", ((160+100*i, window_height-230), (120, 40)))
