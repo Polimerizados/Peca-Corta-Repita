@@ -1,6 +1,6 @@
 import pygame, sys, random, os
 from pygame.locals import *
-from dez_e_dez import window_width, window_height, clock, screen
+from config import window_width, window_height
 
 class dNTP:
     def __init__(self, level, up_down, base="random", pos="random"):

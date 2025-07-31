@@ -1,28 +1,11 @@
-
-# 
-#
-#
-#
-#
-# APERTE ESPAÇO DUAS VEZES PARA INICIAR DENTRO DA EXECUÇÃO
-#
-#
-#
-#
-#
-
-
-import pygame, sys, random
+import pygame, sys, random, os
 from pygame.locals import *
+from config import window_width, window_height, screen, clock
+from Particoes.loja import abrir_loja
+from Particoes.fases import rodar_fase
 
-######## ESCOPO GERAL ########
-pygame.init()
-clock = pygame.time.Clock()
 pygame.display.set_caption("pspspspspspspsps")
 
-window_width = int(pygame.display.Info().current_w) # 1280
-window_height = int(pygame.display.Info().current_h) # 800
-screen = pygame.display.set_mode((window_width, window_height))
 background = pygame.Surface((window_width, window_height)) 
 main_menu = pygame.Surface((window_width, window_height))
 screen.fill(pygame.Color(0, 0, 0))
@@ -55,13 +38,16 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-            if event.key == K_SPACE:  
-                with open("Particoes/fases.py") as fases:
-                    exec(fases.read())
+            if event.key == K_SPACE:
+                dificuldade = "f"
+                rodar_fase(dificuldade, screen, clock)
 
-            if event.key == K_l:
-                with open("Particoes/loja.py") as loja:
-                    exec(loja.read())
+            if event.key == K_s:
+                selecao = abrir_loja(screen, clock)  # Passe a tela e clock para loja
+                if selecao:
+                    print("Escolha do usuário:")
+                    print("Polimerase:", selecao["polimerase"]["nome"])
+                    print("Primer:", selecao["primer"]["nome"])
                      
     pygame.display.update() 
 
