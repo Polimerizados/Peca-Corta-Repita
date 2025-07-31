@@ -39,7 +39,7 @@ while True:
                 sys.exit()
 
             if event.key == K_SPACE:
-                dificuldade = "m"
+                dificuldade = "m" 
                 rodar_fase(dificuldade, screen, clock)
 
             if event.key == K_s:
