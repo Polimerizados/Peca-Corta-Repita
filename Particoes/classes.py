@@ -66,7 +66,7 @@ class ligH:
             self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_CG.png"), (100, 150)) 
         elif self.base == "G" and self.base_par == "C":
             self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_GC.png"), (100, 150)) 
-
+        
 class dP:
     def __init__(self, level, tipo):
         self.level = level
