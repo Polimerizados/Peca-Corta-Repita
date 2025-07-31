@@ -78,8 +78,7 @@ def rodar_fase(dificuldade, screen, clock):
                 continue
             pygame.draw.rect(foreground, "aqua", ((160+100*i, window_height-230), (120, 40)))
             foreground.blit(contra_fita[i].img, (160+100*i, window_height-240))
-            if lista_ligH[i].base_par == nucleotideos_fita[i].base_par:
-                foreground.blit(lista_ligH[i].img, (160+100*i, window_height-240))
+            foreground.blit(lista_ligH[i].img, (160+100*i, window_height-240))
 
         ### MIDGROUND
         # Atualiza as posições de tempo em tempo, sob o mouse ou aleatoriamente
@@ -128,8 +127,8 @@ def rodar_fase(dificuldade, screen, clock):
                                 (dNTPs_livres[clicado_index].pos[0],window_height-240)
                             )
                             lista_ligH[lista_ligH.index(0)] = ligH(
-                                nucleotideos_fita[lista_ligH.index(0)],
-                                contra_fita[lista_ligH.index(0)]
+                                nucleotideos_fita[lista_ligH.index(0)].base,
+                                contra_fita[lista_ligH.index(0)].base
                             )
                             dNTPs_livres.pop(clicado_index)
                             dNTPs_livres.append(dNTP(dificuldade, "down"))
