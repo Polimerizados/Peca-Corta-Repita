@@ -12,7 +12,7 @@ def rodar_fase(dificuldade, screen, clock):
     background.fill(pygame.Color(240, 240, 240, 255))
     midground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
     foreground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
-    dificuldade = "m"
+
 
     # Spawn temporário de 12 bases:
     dNTPs_livres = [dNTP(dificuldade, "down") for _ in range(12)]
@@ -94,49 +94,7 @@ def rodar_fase(dificuldade, screen, clock):
 
         screen.blit(midground, (0, 0))
 
-        ### FOREGROUND
-        pygame.draw.rect(foreground, "aqua", ((0, window_height-110), (window_width, 40)))
-        pygame.draw.rect(foreground, "aqua", ((0, window_height-230), (160, 40)))
-        for i in range(12):
-            foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-160))
-            if contra_fita[i] == 0:
-                continue
-            pygame.draw.rect(foreground, "aqua", ((160+100*i, window_height-230), (100, 40)))
-            foreground.blit(contra_fita[i].img, (160+100*i, window_height-240))
 
-        # Identifica se se clicou em uma dNTP livre
-        if event.type == MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            for i in range(12):
-                dNTP_x, dNTP_y = dNTPs_livres[i].pos
-                (diff_x, diff_y) = (mouse_x - dNTP_x, mouse_y - dNTP_y)
-                if 100 >= diff_x >= 0 and 100 >= diff_y >= 0:  
-                    clicado_index = i
-                    break
-
-        # Identifica quando se solta a dNTP, se a liberta, se em cima da fita
-        if event.type == MOUSEBUTTONUP:
-            diff_x = -1
-            diff_y = -1
-            if isinstance(clicado_index, int):   
-                pareante = nucleotideos_fita[contra_fita.index(0)] 
-                if pygame.mouse.get_pos()[0] in range(pareante.pos[0], pareante.pos[0]+100):
-                    if pygame.mouse.get_pos()[1] in range(pareante.pos[1]-100, pareante.pos[1]+100):
-                        contra_fita[contra_fita.index(0)] = dNTP(
-                            dificuldade,
-                            "down",
-                            dNTPs_livres[clicado_index].base,
-                            (dNTPs_livres[clicado_index].pos[0],window_height-240)
-                        )
-                        lista_ligH[lista_ligH.index(0)] = ligH(
-                            nucleotideos_fita[lista_ligH.index(0)].base,
-                            contra_fita[lista_ligH.index(0)].base
-                        )
-                        dNTPs_livres.pop(clicado_index)
-                        dNTPs_livres.append(dNTP(dificuldade, "down"))
-                        pontuacao_global += 1
-                        salvar_pontuacao(pontuacao_global)
-            clicado_index = ""
         foreground.blit(polimerase_sel_img, (-60, window_height-320))
 
         screen.blit(foreground, (0, 0))
