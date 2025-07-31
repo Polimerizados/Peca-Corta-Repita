@@ -1,6 +1,6 @@
 import pygame, sys, random, os
 from pygame.locals import *
-from dez_e_dez import window_width, window_height, clock, screen
+from config import window_width, window_height
 
 class dNTP:
     def __init__(self, level, up_down, base="random", pos="random"):
@@ -9,7 +9,7 @@ class dNTP:
         self.up_down = up_down
 
         if base == "random":
-            if level == "f":
+            if level == "f" or "m" or "d":
                 bases = ["A", "T", "C", "G"]
             self.base = random.choice(bases)
         else:
