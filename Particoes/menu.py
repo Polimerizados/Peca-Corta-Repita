@@ -35,7 +35,7 @@ def abrir_menu(screen, clock):
         for i in range(100):
             if ticking == bolinhas_bg[i].tick:
                 bolinhas_bg[i].acelerar()
-            bolinhas_bg[i].deslocar()
+            bolinhas_bg[i].deslocar(0)
             foreground.blit(bolinhas_bg[i].img, bolinhas_bg[i].pos)
 
         screen.blit(foreground, (0, 0))

@@ -77,7 +77,7 @@ def abrir_loja(screen, clock):
         for i in range(100):
             if ticking == bolinhas_bg[i].tick:
                 bolinhas_bg[i].acelerar()
-            bolinhas_bg[i].deslocar()
+            bolinhas_bg[i].deslocar(0)
             screen.blit(bolinhas_bg[i].img, bolinhas_bg[i].pos)
 
         screen.blit(titulo, (window_width//2 - titulo.get_width()//2, 40))

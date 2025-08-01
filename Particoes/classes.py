@@ -54,8 +54,8 @@ class dNTP:
         else:
             self.vel = (random.randint(-5, 5), random.randint(-5, 5))
 
-    def deslocar(self):
-        self.pos = tuple(a + b for a, b in zip(self.pos, self.vel))
+    def deslocar(self, scrolling):
+        self.pos = (self.pos[0] + self.vel[0] + scrolling, self.pos[1] + self.vel[1])
 
 class ligH:
     def __init__(self, base, base_par):
@@ -82,25 +82,29 @@ class bolinhas:
 
         self.pos = (random.randint(0, window_width-80), random.randint(0, window_height-100))
         self.tick = random.randint(0, 59)
-        self.vel = (random.randint(-5, 5), random.randint(-5, 5))
+        self.vel = (random.randint(-3, 3), random.randint(-3, 3))
         self.img = pygame.transform.scale(pygame.image.load(f"Imagens/bolinha.png"), (10, 10)) 
 
     def acelerar(self):
         if self.pos[0] < 0:
-            self.vel = (random.randint(1, 5), random.randint(-5, 5))                
+            self.vel = (random.randint(0, 1), random.randint(-1, 1))                
         elif self.pos[0] > window_width:
-            self.vel = (random.randint(-5, -1), random.randint(-5, 5))
+            self.vel = (random.randint(-1, 0), random.randint(-1, 1))
         elif self.pos[1] < 0:
-            self.vel = (random.randint(-5, 5), random.randint(1, 5))
+            self.vel = (random.randint(-1, 1), random.randint(0, 1))
         elif self.pos[1] > window_height:
-            self.vel = (random.randint(-5, 5), random.randint(-5, -1))
+            self.vel = (random.randint(-1, 1), random.randint(-1, 0))
         else:
-            self.vel = (random.randint(-5, 5), random.randint(-5, 5))
+            self.vel = (random.randint(-1, 1), random.randint(-1, 1))
 
-    def deslocar(self):
-        self.pos = tuple(a + b for a, b in zip(self.pos, self.vel))
+    def deslocar(self, scrolling):
+        self.pos = (self.pos[0] + self.vel[0] + scrolling / 2, self.pos[1] + self.vel[1])
         
+class polimerase:
+    def __init__(self, polimerase_selecionada, dificuldade):
+        self.img = pygame.transform.scale(pygame.image.load(f"Imagens/polimerase_teste.png"), (200, 300))
 
-
-# class polimerase:
-# (0img, 1vel_arrasto_mouse, 2vel_poliemrizacao/scroll_da_fita, 3proofreading)
+        if polimerase_selecionada == "polimerase_teste":
+            self.scrolling_ticks = 200 # Imagem 100X100
+            self.scrolling = -1 # 1 pixel por tick confirmado
+            self.se_multiplo = True # pulando 1 tick sim, 1 não, 3,333 sec para cada pareamento

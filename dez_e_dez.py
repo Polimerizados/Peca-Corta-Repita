@@ -3,13 +3,11 @@ from pygame.locals import *
 from config import window_width, window_height, screen, clock
 from Particoes.loja import abrir_loja
 from Particoes.fases import rodar_fase
-from Particoes.menu import abrir_menu
 
 pygame.display.set_caption("pspspspspspspsps")
 
 background = pygame.Surface((window_width, window_height)) 
 main_menu = pygame.Surface((window_width, window_height))
-screen.fill(pygame.Color(0, 0, 0))
 background.fill(pygame.Color(255, 255, 255))
 main_menu.fill(pygame.Color(0, 255, 0)) 
 main_menu.set_alpha(50)
@@ -27,8 +25,8 @@ def carregar_pontuacao():
     return 0
 
 ########### WHILE ############
-while True:
-
+while True: 
+    
     screen.blit(background, (0, 0))
     screen.blit(main_menu, (0, 0))
 
@@ -40,18 +38,7 @@ while True:
                 sys.exit()
 
             if event.key == K_SPACE:
-                abrir_menu(screen, clock)
-
-            if event.key == K_1:
-                dificuldade = "f" 
-                rodar_fase(dificuldade, screen, clock)
-            
-            if event.key == K_2:
                 dificuldade = "m"
-                rodar_fase(dificuldade, screen, clock)
-
-            if event.key == K_3:
-                dificuldade = "d"
                 rodar_fase(dificuldade, screen, clock)
 
             if event.key == K_s:
@@ -59,8 +46,7 @@ while True:
                 if selecao:
                     print("Escolha do usuário:")
                     print("Polimerase:", selecao["polimerase"]["nome"])
-                    print("Primer:", selecao["primer"]["nome"])
-                     
-    pygame.display.update() 
-
+                    print("Primer:", selecao["primer"]["nome"]) 
+                              
+    pygame.display.update()
     clock.tick(60)
