@@ -9,7 +9,7 @@ class dNTP:
         self.up_down = up_down
 
         if base == "random":
-            if level == "f" or "m" or "d":
+            if level == "f" or level == "m" or level == "d":
                 bases = ["A", "T", "C", "G"]
             self.base = random.choice(bases)
         else:
@@ -28,7 +28,7 @@ class dNTP:
             self.base_par = "C"
             self.tipo = "purica"
     
-        if level == "m" or "d":
+        if level == "m" or level == "d":
             self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png"), (100, 100)) 
         elif level == "f":
             self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png"), (80, 100))
@@ -74,7 +74,7 @@ class dP:
     def __init__(self, level, tipo="purica", up_down="up"):
         self.level = level
         self.tipo = tipo
-        if level == "m" or "d":
+        if level == "m" or level == "d":
             self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_dP_{tipo}_{up_down}.png"), (100, 80)) 
 
 class bolinhas:

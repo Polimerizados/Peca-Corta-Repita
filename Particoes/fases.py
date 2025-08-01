@@ -30,11 +30,11 @@ def rodar_fase(dificuldade, screen, clock):
     polimerase_sel_img = pygame.transform.scale(polimerase_sel[0], (200, 280)) 
     primer_sel_img = pygame.transform.scale(primer_sel[0], (500, 200))
     nucleotideos_fita = [dNTP(dificuldade, "up", "random", (160+100*i, window_height-190)) for i in range(12)]
-    dP_fita = [dP(dificuldade, nucleotideos_fita[i].tipo, "up") for i in range(12)]
     dP_contra_fita = [0] * 12
     contra_fita = [0] * 12
     lista_ligH = [0] * 12
-    if dificuldade == "m" or "d":
+    if dificuldade == "m" or dificuldade == "d":
+        dP_fita = [dP(dificuldade, nucleotideos_fita[i].tipo, "up") for i in range(12)]
         primeiro_par = pygame.transform.scale(pygame.image.load(f"Imagens/primeiro_par_f{dificuldade}.png"), (100, 270))
 
 
@@ -79,7 +79,7 @@ def rodar_fase(dificuldade, screen, clock):
         for i in range(12):
             if dificuldade == "f":
                 foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-160))
-            if dificuldade == "m" or "d":
+            if dificuldade == "m" or dificuldade == "d":
                 foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-190))
                 foreground.blit(dP_fita[i].img, (160+100*i, window_height-110))
                 
@@ -88,7 +88,7 @@ def rodar_fase(dificuldade, screen, clock):
             if dificuldade == "f":
                 pygame.draw.rect(foreground, "aqua", ((160+100*i, window_height-230), (120, 40)))
             foreground.blit(contra_fita[i].img, (160+100*i, window_height-240))
-            if dificuldade == "m" or "d":
+            if dificuldade == "m" or dificuldade == "d":
                 foreground.blit(dP_contra_fita[i].img, (160+100*i, window_height-300))
                 if nucleotideos_fita[i].base_par == contra_fita[i].base:
                     foreground.blit(lista_ligH[i].img, (160+100*i, window_height-240))
@@ -107,7 +107,7 @@ def rodar_fase(dificuldade, screen, clock):
 
         screen.blit(midground, (0, 0))
 
-        if dificuldade == "m" or "d":
+        if dificuldade == "m" or dificuldade == "d":
             foreground.blit(primeiro_par, (60, window_height-300))
         foreground.blit(polimerase_sel_img, (-60, window_height-320))
 
@@ -144,7 +144,7 @@ def rodar_fase(dificuldade, screen, clock):
                                 nucleotideos_fita[lista_ligH.index(0)].base,
                                 contra_fita[lista_ligH.index(0)].base
                             )
-                            if dificuldade == "m" or "d":
+                            if dificuldade == "m" or dificuldade == "d":
                                 dP_contra_fita[dP_contra_fita.index(0)] = dP(
                                     dificuldade, 
                                     dNTPs_livres[clicado_index].tipo,
