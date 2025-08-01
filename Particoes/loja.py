@@ -1,5 +1,6 @@
 import pygame, sys
 from pygame.locals import *
+from Particoes.classes import bolinhas
 
 def abrir_loja(screen, clock):
     window_width, window_height = screen.get_size()
@@ -37,8 +38,12 @@ def abrir_loja(screen, clock):
 
     selecionado = {"polimerase": 1, "primer": 1}
 
-    botao_voltar = pygame.Rect(50, window_height - 120, 150, 50)
-    botao_seguinte = pygame.Rect(window_width - 200, window_height - 120, 150, 50)
+    bolinhas_bg = [bolinhas() for _ in range(100)]
+    titulo = pygame.transform.scale(pygame.image.load(f"Imagens/titulo_loja.png"), (1000, 125))
+    botao_voltar = pygame.transform.scale(pygame.image.load(f"Imagens/botao_voltar.png"), (210, 75))
+    voltar_rect = pygame.Rect((50, window_height - 120), (210, 75))
+    botao_seguinte = pygame.transform.scale(pygame.image.load(f"Imagens/botao_seguinte.png"), (210, 75))
+    seguinte_rect = pygame.Rect((window_width - 270, window_height - 120), (210, 75))
     setas = {
         "esq_poli": pygame.Rect(100, 200, 50, 50),
         "dir_poli": pygame.Rect(500, 200, 50, 50),
@@ -58,12 +63,23 @@ def abrir_loja(screen, clock):
         return ret
 
     loja_ativa = True
+    ticking = 60
     selecao_final = {}
 
     while loja_ativa:
         screen.fill(BRANCO)
 
-        titulo = fonte.render("Selecione seus componentes", True, PRETO)
+        if ticking < 60:
+            ticking += 1
+        else:
+            ticking = 0
+
+        for i in range(100):
+            if ticking == bolinhas_bg[i].tick:
+                bolinhas_bg[i].acelerar()
+            bolinhas_bg[i].deslocar()
+            screen.blit(bolinhas_bg[i].img, bolinhas_bg[i].pos)
+
         screen.blit(titulo, (window_width//2 - titulo.get_width()//2, 40))
 
         moeda = fonte.render(f"{nucleotideos} Nucleotídeos", True, LARANJA)
@@ -92,10 +108,8 @@ def abrir_loja(screen, clock):
                 ])
 
 
-        pygame.draw.rect(screen, PRETO, botao_voltar, 2)
-        pygame.draw.rect(screen, PRETO, botao_seguinte, 2)
-        screen.blit(fonte.render("Voltar", True, PRETO), (botao_voltar.x + 20, botao_voltar.y + 10))
-        screen.blit(fonte.render("Seguinte", True, PRETO), (botao_seguinte.x + 20, botao_seguinte.y + 10))
+        screen.blit(botao_voltar, (50, window_height - 120))
+        screen.blit(botao_seguinte, (window_width - 270, window_height - 120))
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -128,16 +142,25 @@ def abrir_loja(screen, clock):
                         nucleotideos -= item["custo"]
                         salvar_pontuacao(nucleotideos)
 
-                if botao_voltar.collidepoint(mx, my):
+                if voltar_rect.collidepoint(mx, my):
                     loja_ativa = False
+                    from Particoes.menu import abrir_menu
+                    abrir_menu(screen, clock)
                     return None
 
-                if botao_seguinte.collidepoint(mx, my):
+                if seguinte_rect.collidepoint(mx, my):
                     selecao_final = {
                         "polimerase": componentes["polimerases"][selecionado["polimerase"]],
                         "primer": componentes["primers"][selecionado["primer"]],
                     }
                     loja_ativa = False
+                    from Particoes.dificuldades import abrir_dificuldades
+                    abrir_dificuldades(screen, clock)
+            
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
+                loja_ativa = False
+                from Particoes.menu import abrir_menu
+                abrir_menu(screen, clock)
 
         pygame.display.update()
         clock.tick(60)

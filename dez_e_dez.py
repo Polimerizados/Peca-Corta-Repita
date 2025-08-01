@@ -3,6 +3,7 @@ from pygame.locals import *
 from config import window_width, window_height, screen, clock
 from Particoes.loja import abrir_loja
 from Particoes.fases import rodar_fase
+from Particoes.menu import abrir_menu
 
 pygame.display.set_caption("pspspspspspspsps")
 
@@ -39,7 +40,18 @@ while True:
                 sys.exit()
 
             if event.key == K_SPACE:
-                dificuldade = "m" 
+                abrir_menu(screen, clock)
+
+            if event.key == K_1:
+                dificuldade = "f" 
+                rodar_fase(dificuldade, screen, clock)
+            
+            if event.key == K_2:
+                dificuldade = "m"
+                rodar_fase(dificuldade, screen, clock)
+
+            if event.key == K_3:
+                dificuldade = "d"
                 rodar_fase(dificuldade, screen, clock)
 
             if event.key == K_s:

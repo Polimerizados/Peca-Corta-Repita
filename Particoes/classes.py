@@ -71,7 +71,7 @@ class ligH:
             self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_GC.png"), (100, 150))
         
 class dP:
-    def __init__(self, level, tipo, up_down):
+    def __init__(self, level, tipo="purica", up_down="up"):
         self.level = level
         self.tipo = tipo
         if level == "m":

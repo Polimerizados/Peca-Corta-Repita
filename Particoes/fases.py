@@ -31,8 +31,11 @@ def rodar_fase(dificuldade, screen, clock):
     primer_sel_img = pygame.transform.scale(primer_sel[0], (500, 200))
     nucleotideos_fita = [dNTP(dificuldade, "up", "random", (160+100*i, window_height-190)) for i in range(12)]
     dP_fita = [dP(dificuldade, nucleotideos_fita[i].tipo, "up") for i in range(12)]
+    dP_contra_fita = [0] * 12
     contra_fita = [0] * 12
     lista_ligH = [0] * 12
+    primeira_par = pygame.transform.scale(pygame.image.load(f"Imagens/primeiro_par.png"), (100, 270))
+
 
     ########### WHILE ############
     clicado_index = ""
@@ -68,18 +71,26 @@ def rodar_fase(dificuldade, screen, clock):
         # REMOVER DEPOIS - APENAS PARA TESTES #
 
         ### FOREGROUND
-        pygame.draw.rect(foreground, "aqua", ((0, window_height-120), (window_width, 40)))
-        pygame.draw.rect(foreground, "aqua", ((0, window_height-230), (160, 40)))
+        if dificuldade == "f":
+            pygame.draw.rect(foreground, "aqua", ((0, window_height-120), (window_width, 40)))
+            pygame.draw.rect(foreground, "aqua", ((0, window_height-230), (160, 40)))
+
         for i in range(12):
-            foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-190))
+            if dificuldade == "f":
+                foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-160))
             if dificuldade == "m":
+                foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-190))
                 foreground.blit(dP_fita[i].img, (160+100*i, window_height-110))
+                
             if contra_fita[i] == 0:
                 continue
-            pygame.draw.rect(foreground, "aqua", ((160+100*i, window_height-230), (120, 40)))
+            if dificuldade == "f":
+                pygame.draw.rect(foreground, "aqua", ((160+100*i, window_height-230), (120, 40)))
             foreground.blit(contra_fita[i].img, (160+100*i, window_height-240))
-            if nucleotideos_fita[i].base_par == contra_fita[i].base:
-                foreground.blit(lista_ligH[i].img, (160+100*i, window_height-240))
+            if dificuldade == "m":
+                foreground.blit(dP_contra_fita[i].img, (160+100*i, window_height-300))
+                if nucleotideos_fita[i].base_par == contra_fita[i].base:
+                    foreground.blit(lista_ligH[i].img, (160+100*i, window_height-240))
 
         ### MIDGROUND
         # Atualiza as posições de tempo em tempo, sob o mouse ou aleatoriamente
@@ -95,7 +106,8 @@ def rodar_fase(dificuldade, screen, clock):
 
         screen.blit(midground, (0, 0))
 
-
+        if dificuldade == "m":
+            foreground.blit(primeira_par, (60, window_height-300))
         foreground.blit(polimerase_sel_img, (-60, window_height-320))
 
         screen.blit(foreground, (0, 0))
@@ -131,6 +143,12 @@ def rodar_fase(dificuldade, screen, clock):
                                 nucleotideos_fita[lista_ligH.index(0)].base,
                                 contra_fita[lista_ligH.index(0)].base
                             )
+                            if dificuldade == "m":
+                                dP_contra_fita[dP_contra_fita.index(0)] = dP(
+                                    dificuldade, 
+                                    dNTPs_livres[clicado_index].tipo,
+                                    "down"
+                                )
                             dNTPs_livres.pop(clicado_index)
                             dNTPs_livres.append(dNTP(dificuldade, "down"))
                             pontuacao_global += 1
@@ -141,6 +159,8 @@ def rodar_fase(dificuldade, screen, clock):
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running = False
+                    from Particoes.dificuldades import abrir_dificuldades
+                    abrir_dificuldades(screen, clock)
 
         pygame.display.update()
         clock.tick(60)
