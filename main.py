@@ -1,7 +1,7 @@
 import pygame, sys, random, os
 from pygame.locals import *
 from config import window_width, window_height, screen, clock
-from Particoes.loja import abrir_loja
+from Particoes.menu import abrir_menu
 from Particoes.fases import rodar_fase
 
 pygame.display.set_caption("pspspspspspspsps")
@@ -38,15 +38,7 @@ while True:
                 sys.exit()
 
             if event.key == K_SPACE:
-                dificuldade = "m"
-                rodar_fase(dificuldade, screen, clock)
-
-            if event.key == K_s:
-                selecao = abrir_loja(screen, clock)  # Passe a tela e clock para loja
-                if selecao:
-                    print("Escolha do usuário:")
-                    print("Polimerase:", selecao["polimerase"]["nome"])
-                    print("Primer:", selecao["primer"]["nome"]) 
+                abrir_menu(screen, clock)
                               
     pygame.display.update()
     clock.tick(60)

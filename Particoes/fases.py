@@ -123,11 +123,11 @@ def rodar_fase(dificuldade, screen, clock):
         ### FOREGROUND
         if dificuldade == "f":
             pygame.draw.rect(foreground, "aqua", ((0, window_height-120), (window_width, 40)))
-            pygame.draw.rect(foreground, "aqua", ((0, window_height-230), (160, 40)))
+            pygame.draw.rect(foreground, "aqua", ((0, window_height-250), (160, 40)))
 
         for i in range(14):
             if dificuldade == "f":
-                nucleotideos_fita[i].pos = (inicio_x_fita+100*(i+qnt_scrolls), window_height-190)
+                nucleotideos_fita[i].pos = (inicio_x_fita+100*(i+qnt_scrolls), window_height-170)
                 foreground.blit(nucleotideos_fita[i].img, nucleotideos_fita[i].pos)
             if dificuldade == "m" or dificuldade == "d":
                 nucleotideos_fita[i].pos = (inicio_x_fita+100*(i+qnt_scrolls), window_height-190)
@@ -182,11 +182,11 @@ def rodar_fase(dificuldade, screen, clock):
                                     dNTPs_livres[clicado_index].base,
                                     (pareante.pos[0], window_height-240)
                                 )
-                                lista_ligH[lista_ligH.index(0)] = ligH(
-                                    nucleotideos_fita[lista_ligH.index(0)].base,
-                                    contra_fita[lista_ligH.index(0)].base
-                                )
                                 if dificuldade == "m" or dificuldade == "d":
+                                    lista_ligH[lista_ligH.index(0)] = ligH(
+                                        pareante.base,
+                                        pareante.base_par
+                                    )
                                     dP_contra_fita[dP_contra_fita.index(0)] = dP(
                                         dificuldade, 
                                         dNTPs_livres[clicado_index].tipo,
