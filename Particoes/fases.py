@@ -34,7 +34,8 @@ def rodar_fase(dificuldade, screen, clock):
     dP_contra_fita = [0] * 12
     contra_fita = [0] * 12
     lista_ligH = [0] * 12
-    primeira_par = pygame.transform.scale(pygame.image.load(f"Imagens/primeiro_par.png"), (100, 270))
+    if dificuldade == "m" or "d":
+        primeiro_par = pygame.transform.scale(pygame.image.load(f"Imagens/primeiro_par_f{dificuldade}.png"), (100, 270))
 
 
     ########### WHILE ############
@@ -78,7 +79,7 @@ def rodar_fase(dificuldade, screen, clock):
         for i in range(12):
             if dificuldade == "f":
                 foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-160))
-            if dificuldade == "m":
+            if dificuldade == "m" or "d":
                 foreground.blit(nucleotideos_fita[i].img, (160+100*i, window_height-190))
                 foreground.blit(dP_fita[i].img, (160+100*i, window_height-110))
                 
@@ -87,7 +88,7 @@ def rodar_fase(dificuldade, screen, clock):
             if dificuldade == "f":
                 pygame.draw.rect(foreground, "aqua", ((160+100*i, window_height-230), (120, 40)))
             foreground.blit(contra_fita[i].img, (160+100*i, window_height-240))
-            if dificuldade == "m":
+            if dificuldade == "m" or "d":
                 foreground.blit(dP_contra_fita[i].img, (160+100*i, window_height-300))
                 if nucleotideos_fita[i].base_par == contra_fita[i].base:
                     foreground.blit(lista_ligH[i].img, (160+100*i, window_height-240))
@@ -106,8 +107,8 @@ def rodar_fase(dificuldade, screen, clock):
 
         screen.blit(midground, (0, 0))
 
-        if dificuldade == "m":
-            foreground.blit(primeira_par, (60, window_height-300))
+        if dificuldade == "m" or "d":
+            foreground.blit(primeiro_par, (60, window_height-300))
         foreground.blit(polimerase_sel_img, (-60, window_height-320))
 
         screen.blit(foreground, (0, 0))
@@ -143,7 +144,7 @@ def rodar_fase(dificuldade, screen, clock):
                                 nucleotideos_fita[lista_ligH.index(0)].base,
                                 contra_fita[lista_ligH.index(0)].base
                             )
-                            if dificuldade == "m":
+                            if dificuldade == "m" or "d":
                                 dP_contra_fita[dP_contra_fita.index(0)] = dP(
                                     dificuldade, 
                                     dNTPs_livres[clicado_index].tipo,
