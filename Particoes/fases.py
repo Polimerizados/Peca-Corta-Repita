@@ -123,7 +123,7 @@ def rodar_fase(dificuldade, screen, clock):
         ### FOREGROUND
         if dificuldade == "f":
             pygame.draw.rect(foreground, "aqua", ((0, window_height-120), (window_width, 40)))
-            pygame.draw.rect(foreground, "aqua", ((0, window_height-250), (160, 40)))
+
 
         for i in range(14):
             if dificuldade == "f":
@@ -136,9 +136,10 @@ def rodar_fase(dificuldade, screen, clock):
             if contra_fita[i] == 0:
                 continue
             if dificuldade == "f":
-                pygame.draw.rect(foreground, "aqua", ((inicio_x_fita+100*(i+qnt_scrolls), window_height-230), (120, 40)))
-            foreground.blit(contra_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-240))
+                pygame.draw.rect(foreground, "aqua", ((inicio_x_fita+100*(i+qnt_scrolls), window_height-235), (120, 40)))
+                foreground.blit(contra_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-245))
             if dificuldade == "m" or dificuldade == "d":
+                foreground.blit(contra_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-240))
                 foreground.blit(dP_contra_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-300))
                 if nucleotideos_fita[i].base_par == contra_fita[i].base:
                     foreground.blit(lista_ligH[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-240))
