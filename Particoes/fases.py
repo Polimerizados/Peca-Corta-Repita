@@ -42,6 +42,10 @@ def rodar_fase(dificuldade, screen, clock):
     if dificuldade == "m" or dificuldade == "d":
         dP_fita = [dP(dificuldade, nucleotideos_fita[i].tipo, "up") for i in range(14)]
 
+    # Botão de Pause
+    botao_pause = pygame.transform.scale(pygame.image.load(f"Imagens/pause_botao.png"), (40, 50))
+    pause_rect = pygame.Rect((1197, 35), (40, 50))
+
     ########### WHILE ############
     clicado_index = ""
     ticking = 60
@@ -149,6 +153,7 @@ def rodar_fase(dificuldade, screen, clock):
         screen.blit(foreground, (0, 0))
         pygame.Surface.set_alpha(pol.img, 100)
         screen.blit(pol.img, (550, window_height-320))
+        screen.blit(botao_pause, (1197, 35))
 
         # REMOVER DEPOIS - APENAS PARA TESTES #
         texto_amino = fonte.render(f"pnts: {pontuacao_global}", True, (0, 0, 0))
@@ -158,8 +163,9 @@ def rodar_fase(dificuldade, screen, clock):
         ### EVENTOS
         for event in pygame.event.get():
 
-            # Identifica se se clicou em uma dNTP livre
+            
             if event.type == MOUSEBUTTONDOWN:
+                # Identifica se se clicou em uma dNTP livre
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 for i in range(24):
                     dNTP_x, dNTP_y = dNTPs_livres[i].pos
@@ -167,6 +173,12 @@ def rodar_fase(dificuldade, screen, clock):
                     if 80 >= diff_x >= 0 and 100 >= diff_y >= 0:  
                         clicado_index = i
                         break
+                if pause_rect.collidepoint(event.pos):
+                    from Particoes.pause import pausar
+                    running = pausar(screen, clock)
+                    if not running:
+                        from Particoes.menu import abrir_menu
+                        abrir_menu(screen, clock)
 
             # Identifica quando se solta a dNTP, se a liberta, se em cima da fita
             if event.type == MOUSEBUTTONUP:
@@ -209,6 +221,13 @@ def rodar_fase(dificuldade, screen, clock):
                     running = False
                     from Particoes.dificuldades import abrir_dificuldades
                     abrir_dificuldades(screen, clock)
+                if event.key == K_p:
+                    from Particoes.pause import pausar
+                    running = pausar(screen, clock)
+                    if not running:
+                        from Particoes.menu import abrir_menu
+                        abrir_menu(screen, clock)
+
 
         pygame.display.update()
         clock.tick(60)
