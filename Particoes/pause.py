@@ -87,7 +87,6 @@ def pausar(screen, clock):
 
         pygame.draw.circle(screen, BLACK, handle_center_m, handle_radius_m)
 
-        print(slider_value_m)
         value_text = font.render(f"{slider_value_m}", True, BLACK)
         screen.blit(value_text, (slider_x_m + slider_width_m + 20, slider_y_m-15))
 
@@ -98,7 +97,6 @@ def pausar(screen, clock):
 
         pygame.draw.circle(screen, BLACK, handle_center_s, handle_radius_s)
 
-        print(slider_value_s)
         value_text = font.render(f"{slider_value_s}", True, BLACK)
         screen.blit(value_text, (slider_x_s + slider_width_s + 20, slider_y_s-15))
 
@@ -107,14 +105,12 @@ def pausar(screen, clock):
         nonlocal slider_value_m
         slider_value_m = int(((handle_center_m[0] - slider_x_m) / slider_width_m) * 100)
         slider_value_m = max(0, min(100, slider_value_m))
-        print(f"ATUALIZANDO: m = {slider_value_m}")
         
     def update_s_slider_value():
         """Atualiza o valor do som"""
         nonlocal slider_value_s
         slider_value_s = int(((handle_center_s[0] - slider_x_s) / slider_width_s) * 100)
         slider_value_s = max(0, min(100, slider_value_s))
-        print(f"ATUALIZANDO: m = {slider_value_s}")
 
     ticking = 60
     p_running = True
