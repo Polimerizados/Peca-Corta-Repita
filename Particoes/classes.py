@@ -1,4 +1,4 @@
-import pygame, sys, random, os
+import pygame, sys, random, os, math
 from pygame.locals import *
 from config import window_width, window_height
 
@@ -102,9 +102,110 @@ class bolinhas:
         
 class polimerase:
     def __init__(self, polimerase_selecionada, dificuldade):
-        self.img = pygame.transform.scale(pygame.image.load(f"Imagens/polimerase_teste.png"), (200, 300))
+        self.img = pygame.transform.scale(pygame.image.load(f"Imagens/{polimerase_selecionada}_polimerase.png"), (200, 300))
 
-        if polimerase_selecionada == "polimerase_teste":
+        #if polimerase_selecionada == "polimerase_teste":
+        if True:
             self.scrolling_ticks = 200 # Imagem 100X100
             self.scrolling = -1 # 1 pixel por tick confirmado
             self.se_multiplo = True # pulando 1 tick sim, 1 não, 3,333 sec para cada pareamento
+
+class PolimeraseSelect:
+    def __init__(self, cx, cy, raio, dicionario, scale=185, img="taq_polimerase_select", vel_ang=2, pos_inicial=0):
+        self.cx = cx
+        self.cy = cy
+        self.raio = raio
+        self.scale = scale
+        self.nome = dicionario["nome"]
+        self.tag = dicionario["tag"]
+        self.custo = dicionario["custo"]
+        self.desbloqueado = dicionario["desbloqueado"]
+        self.img = pygame.image.load(f"Imagens/{img}.png")
+        try:
+            self.img_bloqueado = pygame.image.load(f"Imagens/bloqueado_{self.custo}.png")
+        except:
+            self.img_bloqueado = pygame.image.load(f"Imagens/bloqueado_1000.png")
+        self.velocidade_angular = vel_ang
+        
+
+        # Ângulos dos 4 pontos principais
+        self.angulos = [90, 0, 270, 180] # Atrás, direita, frente, esquerda
+        self.posicao_atual = pos_inicial
+        self.posicao_alvo = pos_inicial
+
+        self.angulo = self.angulos[self.posicao_atual]
+        self.alvo = self.angulo
+        self.direcao = 0  # +1 anti-horário, -1 horário, 0 parado
+
+    def girar_direita(self):
+        if self.direcao == 0:
+            self.posicao_alvo = (self.posicao_alvo + 1) % 4
+            self.alvo = self.angulos[self.posicao_alvo]
+            self.direcao = -1  # horário
+
+    def girar_esquerda(self):
+        if self.direcao == 0:
+            self.posicao_alvo = (self.posicao_alvo - 1) % 4
+            self.alvo = self.angulos[self.posicao_alvo]
+            self.direcao = +1  # anti-horário
+
+    def update(self):
+        if self.direcao != 0:
+            if self.angulo == self.alvo:
+                self.posicao_atual = self.posicao_alvo
+                self.direcao = 0
+            else:
+                self.angulo += self.velocidade_angular * self.direcao
+                self.angulo %= 360
+
+
+    def draw(self, surface):
+        if self.posicao_atual == 0 and self.direcao == 0:
+            pass
+        else:
+            rad = math.radians(self.angulo)
+            x = self.cx + self.raio * math.cos(rad)
+            y = self.cy - self.raio * math.sin(rad)
+            self.scale = y*0.2 + 65
+            imagem = pygame.transform.scale(self.img, (self.scale, self.scale))
+            imagem_bloqueado = pygame.transform.scale(self.img_bloqueado, (self.scale, self.scale))
+
+            # posição
+            img_x = x - (self.scale / 2)
+            img_y = 292.5 - (self.scale / 2)
+            self.rect = pygame.Rect(img_x, img_y, self.scale, self.scale)
+
+            if self.posicao_atual == 0:
+                self.rect = pygame.Rect(img_x, img_y, self.scale, self.scale)
+            else:
+                self.rect = None
+
+            fog = max(0, min(255, int(-y * 0.5 + 300)))
+
+            # desenhar a imagem normal
+            surface.blit(imagem, (img_x, img_y))
+
+            if not self.desbloqueado:
+                surface.blit(imagem_bloqueado, (img_x, img_y))
+
+            # camada de fog
+            fog_surface = pygame.Surface((self.scale, self.scale), pygame.SRCALPHA)
+            fog_surface.fill((20, 20, 20, fog))  
+
+            # aplicar por cima
+            surface.blit(fog_surface, (img_x, img_y))
+    
+    def comprar(self):
+        try:
+            with open("pontuacao.txt", "r") as f:
+                nucleotideos = int(f.read())
+        except:
+            nucleotideos = 500
+        if not self.desbloqueado and nucleotideos >= self.custo:
+            self.desbloqueado = True
+            nucleotideos -= self.custo
+            with open("pontuacao.txt", "w") as f:
+                f.write(str(nucleotideos))
+            return True
+        else:
+            return False

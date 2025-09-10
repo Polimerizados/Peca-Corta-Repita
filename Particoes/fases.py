@@ -5,6 +5,7 @@ from Particoes.utils import salvar_pontuacao, carregar_pontuacao
 sys.path.append(os.path.abspath("Particoes"))
 from classes import dNTP, ligH, dP, bolinhas, polimerase
 from config import window_width, window_height, screen, clock
+import config
 
 def rodar_fase(dificuldade, screen, clock):
     ####### ESCOPO DA FASE #######
@@ -26,7 +27,7 @@ def rodar_fase(dificuldade, screen, clock):
     ### Fita
     inicio_x_fita = 0
     """META"""
-    polimerase_selecionada = "polimerase_teste"
+    polimerase_selecionada = config.polimerase_selecionada
     """META"""
     pol = polimerase(polimerase_selecionada, dificuldade)
     nucleotideos_fita = [dNTP(dificuldade, "up", "random", (100*i, window_height-190)) for i in range(14)]
@@ -60,7 +61,8 @@ def rodar_fase(dificuldade, screen, clock):
     # REMOVER DEPOIS - APENAS PARA TESTES #
     pygame.font.init()
     pontuacao_global = carregar_pontuacao()
-    fonte = pygame.font.SysFont("Segoe UI", 48)
+    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 48)
+    moeda = pygame.transform.scale(pygame.image.load(f"Imagens/moeda.png"), (40, 50))
     # REMOVER DEPOIS - APENAS PARA TESTES #
 
     while running:
@@ -156,8 +158,9 @@ def rodar_fase(dificuldade, screen, clock):
         screen.blit(botao_pause, (1197, 35))
 
         # REMOVER DEPOIS - APENAS PARA TESTES #
-        texto_amino = fonte.render(f"pnts: {pontuacao_global}", True, (0, 0, 0))
-        screen.blit(texto_amino, (20, 20))
+        texto_amino = fonte.render(f"{pontuacao_global}", True, (220, 190, 90))
+        screen.blit(moeda, (40 + texto_amino.get_width(), 25))
+        screen.blit(texto_amino, (30, 20))
         # REMOVER DEPOIS - APENAS PARA TESTES #
 
         ### EVENTOS

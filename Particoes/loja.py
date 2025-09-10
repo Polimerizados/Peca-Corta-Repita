@@ -1,33 +1,29 @@
 import pygame, sys
 from pygame.locals import *
-from Particoes.classes import bolinhas
+from Particoes.classes import bolinhas, PolimeraseSelect
+import config
+import math
 
 def abrir_loja(screen, clock):
     window_width, window_height = screen.get_size()
 
     BRANCO = (255, 255, 255)
     PRETO = (0, 0, 0)
-    CINZA = (200, 200, 200)
-    LARANJA = (255, 140, 0)
-    VERDE = (50, 200, 50)
-    VERMELHO = (200, 50, 50)
-    fonte = pygame.font.SysFont("Segoe UI", 32)
-
-    try:
-        with open("pontuacao.txt", "r") as f:
-            nucleotideos = int(f.read())
-    except:
-        nucleotideos = 500
-
-    def salvar_pontuacao(pontos):
-        with open("pontuacao.txt", "w") as f:
-            f.write(str(pontos))
+    DOURADO = (220, 190, 90)
+    VERMELHO = (255, 0, 0)
+    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 32)
+    moeda = pygame.transform.scale(pygame.image.load(f"Imagens/moeda.png"), (40, 50))
+    erro_text = fonte.render(f"Polimerase inválida", True, VERMELHO)
+    sem_dinheiro_text = fonte.render(f"Dinheiro Insuficiente", True, VERMELHO)
+    erro = False
+    sem_dinheiro = False
 
     componentes = {
         "polimerases": [
-            {"nome": "Q5 High-Fidelity", "custo": 1000, "desbloqueado": False},
-            {"nome": "Taq DNA Polimerase", "custo": 0, "desbloqueado": True},
-            {"nome": "Phusion", "custo": 0, "desbloqueado": True},
+            {"nome": "Q5 High Fidelity", "tag": "q5", "custo": 1000, "desbloqueado": False},
+            {"nome": "Taq Polimerase", "tag": "taq", "custo": 0, "desbloqueado": True},
+            {"nome": "Phusion", "tag": "phusion", "custo": 0, "desbloqueado": True},
+            {"nome": "Pfu Polimerase", "tag": "pfu", "custo": 500, "desbloqueado": False},
         ],
         "primers": [
             {"nome": "PrimerBank", "custo": 1500, "desbloqueado": False},
@@ -36,8 +32,6 @@ def abrir_loja(screen, clock):
         ]
     }
 
-    selecionado = {"polimerase": 1, "primer": 1}
-
     bolinhas_bg = [bolinhas() for _ in range(100)]
     titulo = pygame.transform.scale(pygame.image.load(f"Imagens/titulo_loja.png"), (1000, 125))
     botao_voltar = pygame.transform.scale(pygame.image.load(f"Imagens/botao_voltar.png"), (210, 75))
@@ -45,22 +39,23 @@ def abrir_loja(screen, clock):
     botao_seguinte = pygame.transform.scale(pygame.image.load(f"Imagens/botao_seguinte.png"), (210, 75))
     seguinte_rect = pygame.Rect((window_width - 270, window_height - 120), (210, 75))
     setas = {
-        "esq_poli": pygame.Rect(100, 200, 50, 50),
-        "dir_poli": pygame.Rect(500, 200, 50, 50),
-        "esq_primer": pygame.Rect(100, 400, 50, 50),
-        "dir_primer": pygame.Rect(500, 400, 50, 50),
+        "esq_poli": pygame.Rect(300, 267.5, 50, 50),
+        "dir_poli": pygame.Rect(930, 267.5, 50, 50),
     }
+    polimerases = [
+        PolimeraseSelect(640, 400, 200, pos_inicial=0, dicionario=componentes["polimerases"][3], img="pfu_polimerase_select"),
+        PolimeraseSelect(640, 400, 200, pos_inicial=1, dicionario=componentes["polimerases"][2], img="phusion_polimerase_select"),
+        PolimeraseSelect(640, 400, 200, pos_inicial=2, dicionario=componentes["polimerases"][1], img="taq_polimerase_select"), 
+        PolimeraseSelect(640, 400, 200, pos_inicial=3, dicionario=componentes["polimerases"][0], img="q5_polimerase_select"), 
 
-    def desenhar_item(item, pos):
-        cor = VERDE if item["desbloqueado"] else CINZA
-        ret = pygame.Rect(pos[0], pos[1], 200, 100)
-        pygame.draw.rect(screen, cor, ret, border_radius=10)
-        nome = fonte.render(item["nome"], True, PRETO)
-        screen.blit(nome, (pos[0] + (200 - nome.get_width()) // 2, pos[1] + 30))
-        if not item["desbloqueado"]:
-            cadeado = fonte.render(f"{item['custo']} nt", True, VERMELHO)
-            screen.blit(cadeado, (pos[0]+10, pos[1]+60))
-        return ret
+
+    ]
+
+    def checar_giro():
+        for item in polimerases:
+            if item.direcao != 0:
+                return False
+        return True
 
     loja_ativa = True
     ticking = 60
@@ -74,6 +69,12 @@ def abrir_loja(screen, clock):
         else:
             ticking = 0
 
+        try:
+            with open("pontuacao.txt", "r") as f:
+                nucleotideos = int(f.read())
+        except:
+            nucleotideos = 500
+
         for i in range(100):
             if ticking == bolinhas_bg[i].tick:
                 bolinhas_bg[i].acelerar()
@@ -82,16 +83,14 @@ def abrir_loja(screen, clock):
 
         screen.blit(titulo, (window_width//2 - titulo.get_width()//2, 40))
 
-        moeda = fonte.render(f"{nucleotideos} Nucleotídeos", True, LARANJA)
-        screen.blit(moeda, (window_width - moeda.get_width() - 30, 20))
+        moeda_text = fonte.render(f"{nucleotideos}", True, DOURADO)
+        screen.blit(moeda, (1210, 20))  
+        screen.blit(moeda_text, (1200-moeda_text.get_width(), 25))
 
-        pol = componentes["polimerases"][selecionado["polimerase"]]
-        screen.blit(fonte.render("DNA Polimerase", True, PRETO), (200, 160))
-        desenhar_item(pol, (200, 200))
-
-        primer = componentes["primers"][selecionado["primer"]]
-        screen.blit(fonte.render("Primer", True, PRETO), (200, 360))
-        desenhar_item(primer, (200, 400))
+        if erro:
+            screen.blit(erro_text, (window_width/2 - erro_text.get_width(), window_height/2 + 50))
+        if sem_dinheiro:
+             screen.blit(sem_dinheiro_text, (window_width/2 - erro_text.get_width(), window_height/2 + 50))
 
         for nome, seta in setas.items():
             if "esq" in nome:
@@ -108,39 +107,45 @@ def abrir_loja(screen, clock):
                 ])
 
 
+        # Atualizar polimerases
+        for item in polimerases:
+            item.update()
+
+        polimerases_ordenadas = sorted(polimerases, key=lambda x: x.scale)
+        for item in polimerases_ordenadas:
+            item.draw(screen)
+        
+        selecionada = polimerases_ordenadas[-1]
+
         screen.blit(botao_voltar, (50, window_height - 120))
         screen.blit(botao_seguinte, (window_width - 270, window_height - 120))
+        if selecionada.desbloqueado:
+            texto_polimerase = fonte.render(f"{selecionada.nome}", True, PRETO)
+            screen.blit(texto_polimerase, (window_width/2 - texto_polimerase.get_width()/2, window_height/2))
+        else:
+            texto_bloqueada = fonte.render(f"BLOQUEADA", True, PRETO)
+            screen.blit(texto_bloqueada, (window_width/2 - texto_bloqueada.get_width()/2, window_height/2))
+ 
 
         for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
 
             if event.type == MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
+                erro = False
+                sem_dinheiro = False
 
                 if setas["esq_poli"].collidepoint(mx, my):
-                    selecionado["polimerase"] = max(0, selecionado["polimerase"] - 1)
+                    for item in polimerases:
+                        item.girar_esquerda()
                 if setas["dir_poli"].collidepoint(mx, my):
-                    selecionado["polimerase"] = min(len(componentes["polimerases"]) - 1, selecionado["polimerase"] + 1)
-                if setas["esq_primer"].collidepoint(mx, my):
-                    selecionado["primer"] = max(0, selecionado["primer"] - 1)
-                if setas["dir_primer"].collidepoint(mx, my):
-                    selecionado["primer"] = min(len(componentes["primers"]) - 1, selecionado["primer"] + 1)
+                    for item in polimerases:
+                        item.girar_direita()
 
-                if pygame.Rect(200, 200, 200, 100).collidepoint(mx, my):
-                    item = componentes["polimerases"][selecionado["polimerase"]]
-                    if not item["desbloqueado"] and nucleotideos >= item["custo"]:
-                        item["desbloqueado"] = True
-                        nucleotideos -= item["custo"]
-                        salvar_pontuacao(nucleotideos)
+                if pygame.Rect(547.5, 200, 185, 185).collidepoint(mx, my):
+                    if not selecionada.desbloqueado:
+                        if not selecionada.comprar():
+                            sem_dinheiro = True
 
-                if pygame.Rect(200, 400, 200, 100).collidepoint(mx, my):
-                    item = componentes["primers"][selecionado["primer"]]
-                    if not item["desbloqueado"] and nucleotideos >= item["custo"]:
-                        item["desbloqueado"] = True
-                        nucleotideos -= item["custo"]
-                        salvar_pontuacao(nucleotideos)
 
                 if voltar_rect.collidepoint(mx, my):
                     loja_ativa = False
@@ -149,18 +154,32 @@ def abrir_loja(screen, clock):
                     return None
 
                 if seguinte_rect.collidepoint(mx, my):
-                    selecao_final = {
-                        "polimerase": componentes["polimerases"][selecionado["polimerase"]],
-                        "primer": componentes["primers"][selecionado["primer"]],
-                    }
-                    loja_ativa = False
-                    from Particoes.dificuldades import abrir_dificuldades
-                    abrir_dificuldades(screen, clock)
+                    config.polimerase_selecionada = selecionada.tag
+                    if selecionada.desbloqueado:
+                        loja_ativa = False
+                        from Particoes.dificuldades import abrir_dificuldades
+                        abrir_dificuldades(screen, clock)
+                    else:
+                        erro = True
             
-            if event.type == KEYDOWN and event.key == K_ESCAPE:
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    loja_ativa = False
+                    from Particoes.menu import abrir_menu
+                    abrir_menu(screen, clock)
+                if event.key == K_RIGHT:
+                    if checar_giro():
+                        for item in polimerases:
+                            item.girar_direita()
+                elif event.key == K_LEFT:
+                    if checar_giro():
+                        for item in polimerases:
+                            item.girar_esquerda()
+
+            if event.type == QUIT:  # usuário clicou no X
                 loja_ativa = False
-                from Particoes.menu import abrir_menu
-                abrir_menu(screen, clock)
+                pygame.quit()
+                sys.exit()
 
         pygame.display.update()
         clock.tick(60)
