@@ -26,9 +26,7 @@ def rodar_fase(dificuldade, screen, clock):
 
     ### Fita
     inicio_x_fita = 0
-    """META"""
     polimerase_selecionada = config.polimerase_selecionada
-    """META"""
     pol = polimerase(polimerase_selecionada, dificuldade)
     nucleotideos_fita = [dNTP(dificuldade, "up", "random", (100*i, window_height-190)) for i in range(14)]
     dP_contra_fita = [0] * 14
@@ -47,6 +45,12 @@ def rodar_fase(dificuldade, screen, clock):
     botao_pause = pygame.transform.scale(pygame.image.load(f"Imagens/pause_botao.png"), (40, 50))
     pause_rect = pygame.Rect((1197, 35), (40, 50))
 
+    # Pontuação
+    pygame.font.init()
+    pontuacao_global = carregar_pontuacao()
+    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 48)
+    moeda = pygame.transform.scale(pygame.image.load(f"Imagens/moeda.png"), (40, 50))
+
     ########### WHILE ############
     clicado_index = ""
     ticking = 60
@@ -58,12 +62,6 @@ def rodar_fase(dificuldade, screen, clock):
     qnt_scrolls = 0
     running = True
 
-    # REMOVER DEPOIS - APENAS PARA TESTES #
-    pygame.font.init()
-    pontuacao_global = carregar_pontuacao()
-    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 48)
-    moeda = pygame.transform.scale(pygame.image.load(f"Imagens/moeda.png"), (40, 50))
-    # REMOVER DEPOIS - APENAS PARA TESTES #
 
     while running:
         # Para diferenciar passagens de tempo
@@ -130,7 +128,6 @@ def rodar_fase(dificuldade, screen, clock):
         if dificuldade == "f":
             pygame.draw.rect(foreground, "aqua", ((0, window_height-120), (window_width, 40)))
 
-
         for i in range(14):
             if dificuldade == "f":
                 nucleotideos_fita[i].pos = (inicio_x_fita+100*(i+qnt_scrolls), window_height-170)
@@ -150,25 +147,22 @@ def rodar_fase(dificuldade, screen, clock):
                 if nucleotideos_fita[i].base_par == contra_fita[i].base:
                     foreground.blit(lista_ligH[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-240))
 
+        # Desenha os grounds, polimerase, botões e pontuação
         screen.blit(background, (0, 0))
         screen.blit(midground, (0, 0))
         screen.blit(foreground, (0, 0))
         pygame.Surface.set_alpha(pol.img, 100)
         screen.blit(pol.img, (550, window_height-320))
         screen.blit(botao_pause, (1197, 35))
-
-        # REMOVER DEPOIS - APENAS PARA TESTES #
         texto_amino = fonte.render(f"{pontuacao_global}", True, (220, 190, 90))
         screen.blit(moeda, (40 + texto_amino.get_width(), 25))
         screen.blit(texto_amino, (30, 20))
-        # REMOVER DEPOIS - APENAS PARA TESTES #
 
         ### EVENTOS
         for event in pygame.event.get():
-
             
-            if event.type == MOUSEBUTTONDOWN:
-                # Identifica se se clicou em uma dNTP livre
+            if event.type == MOUSEBUTTONDOWN: # Clique
+                # Identifica se clicou em uma dNTP livre
                 mouse_x, mouse_y = pygame.mouse.get_pos()
                 for i in range(24):
                     dNTP_x, dNTP_y = dNTPs_livres[i].pos
@@ -176,6 +170,7 @@ def rodar_fase(dificuldade, screen, clock):
                     if 80 >= diff_x >= 0 and 100 >= diff_y >= 0:  
                         clicado_index = i
                         break
+                # Identifica se clicou no botão de pause
                 if pause_rect.collidepoint(event.pos):
                     from Particoes.pause import pausar
                     running = pausar(screen, clock)
@@ -218,13 +213,13 @@ def rodar_fase(dificuldade, screen, clock):
                                 salvar_pontuacao(pontuacao_global)
                 clicado_index = ""
 
-            # Se o usuário quiser sair, só, só
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
+
+            if event.type == KEYDOWN: # Teclado
+                if event.key == K_ESCAPE: # Esc
                     running = False
                     from Particoes.dificuldades import abrir_dificuldades
                     abrir_dificuldades(screen, clock)
-                if event.key == K_p:
+                if event.key == K_p: # P (pause)
                     from Particoes.pause import pausar
                     running = pausar(screen, clock)
                     if not running:

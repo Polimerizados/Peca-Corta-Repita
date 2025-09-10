@@ -131,28 +131,31 @@ def pausar(screen, clock):
     pausado = True
 
     while pausado:
-        
+        # Para diferenciar a passagem do tempo
         if ticking < 60:
             ticking += 1
         else:
             ticking = 0
 
+        # Desenha menu
         if selecionando_idioma:
             screen.blit(menu_idioma, (265, 84))
         else:
             screen.blit(menu_pause, (265, 84))
 
+        # Idioma
         texto_idioma = font.render(config.idioma, True, BLACK)
         screen.blit(texto_idioma, (470, 405)) 
         if config.idioma != "Português":
             screen.blit(idioma_indispoivel, (725, 410)) 
 
+        # Check box
         if config.musica_on:
             screen.blit(check_box, (463, 276))
         if config.som_on:
             screen.blit(check_box, (463, 341))
         
-
+        ## EVENTOS
         for event in pygame.event.get():
             if event.type == KEYDOWN and event.key == K_ESCAPE: # Apertou Esc
                 pausado = False

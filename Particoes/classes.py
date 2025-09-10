@@ -182,7 +182,7 @@ class PolimeraseSelect:
 
             fog = max(0, min(255, int(-y * 0.5 + 300)))
 
-            # desenhar a imagem normal
+            # desenhar a imagem 
             surface.blit(imagem, (img_x, img_y))
 
             if not self.desbloqueado:

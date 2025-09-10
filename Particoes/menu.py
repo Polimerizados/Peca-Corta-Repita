@@ -12,9 +12,6 @@ def abrir_menu(screen, clock):
     background.fill(pygame.Color(255, 255, 255, 255))
     foreground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
 
-    ticking = 60
-    menu_aberto = True
-
     botao = pygame.transform.scale(pygame.image.load(f"Imagens/botao_jogar.png"), (600, 153))
     titulo = pygame.transform.scale(pygame.image.load(f"Imagens/titulo.png"), (1000, 500))
 
@@ -22,35 +19,41 @@ def abrir_menu(screen, clock):
     botao_pos = (340, 400)
     botao_rect = pygame.Rect(botao_pos, (600, 153))  # (pos, tamanho)
 
+    ########### WHILE ############
+    ticking = 60
+    menu_aberto = True
 
     while menu_aberto:
-        screen.blit(background, (0, 0))
-        foreground.fill((0, 0, 0, 0))  # limpa a camada das bolinhas
-
+        # Para diferenciar a passagem do tempo
         if ticking < 60:
             ticking += 1
         else:
             ticking = 0
 
+        # Limpa as camadas
+        foreground.fill((0, 0, 0, 0))  
+
+        # Desenha as bolinhas
         for i in range(100):
             if ticking == bolinhas_bg[i].tick:
                 bolinhas_bg[i].acelerar()
             bolinhas_bg[i].deslocar(0)
             foreground.blit(bolinhas_bg[i].img, bolinhas_bg[i].pos)
 
+        # Desenha grounds, título e botão
+        screen.blit(background, (0, 0))
         screen.blit(foreground, (0, 0))
         screen.blit(botao, botao_pos)
         screen.blit(titulo,(140, 0))
 
-
+        ## EVENTOS
         for event in pygame.event.get():
 
-            if event.type == KEYDOWN and event.key == K_ESCAPE:
+            if event.type == KEYDOWN and event.key == K_ESCAPE: # Esc
                 menu_aberto = False
 
-            # Clique do mouse
-            if event.type == MOUSEBUTTONDOWN and event.button == 1:  # botão esquerdo
-                if botao_rect.collidepoint(event.pos):
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:  # Clique com botão esquerdo
+                if botao_rect.collidepoint(event.pos): # Botão de jogar
                     menu_aberto = False
                     abrir_loja(screen, clock)
 

@@ -2,7 +2,6 @@ import pygame, sys, random, os
 from pygame.locals import *
 from config import window_width, window_height, screen, clock
 from Particoes.menu import abrir_menu
-from Particoes.fases import rodar_fase
 
 pygame.display.set_caption("pspspspspspspsps")
 
@@ -31,13 +30,13 @@ while True:
     screen.blit(main_menu, (0, 0))
 
     for event in pygame.event.get():
-        if event.type == KEYDOWN:
+        if event.type == KEYDOWN: # Teclado
 
-            if event.key == K_ESCAPE:
+            if event.key == K_ESCAPE: # Esc
                 pygame.quit()
                 sys.exit()
 
-            if event.key == K_SPACE:
+            if event.key == K_SPACE: # Espaço
                 abrir_menu(screen, clock)
                               
     pygame.display.update()
