@@ -29,9 +29,9 @@ class dNTP:
             self.tipo = "purica"
     
         if level == "m" or level == "d":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png"), (100, 100)) 
+            self.img = pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png") 
         elif level == "f":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png"), (80, 100))
+            self.img = pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png")
 
         if pos == "random":
             self.pos = (random.randint(0, window_width-80), random.randint(0, window_height-100))
@@ -62,20 +62,20 @@ class ligH:
         self.base = base
         self.base_par = base_par
         if self.base == "A" and self.base_par == "T":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_AT.png"), (100, 150)) 
+            self.img = pygame.image.load(f"Imagens/ligH_AT.png")
         elif self.base == "T" and self.base_par == "A":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_TA.png"), (100, 150)) 
+            self.img = pygame.image.load(f"Imagens/ligH_TA.png")
         elif self.base == "C" and self.base_par == "G":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_CG.png"), (100, 150)) 
+            self.img = pygame.image.load(f"Imagens/ligH_CG.png")
         elif self.base == "G" and self.base_par == "C":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/ligH_GC.png"), (100, 150))
+            self.img = pygame.image.load(f"Imagens/ligH_GC.png")
         
 class dP:
     def __init__(self, level, tipo="purica", up_down="up"):
         self.level = level
         self.tipo = tipo
         if level == "m" or level == "d":
-            self.img = pygame.transform.scale(pygame.image.load(f"Imagens/f{level}_dP_{tipo}_{up_down}.png"), (100, 80)) 
+            self.img = pygame.image.load(f"Imagens/f{level}_dP_{tipo}_{up_down}.png")
 
 class bolinhas:
     def __init__(self):
@@ -102,7 +102,7 @@ class bolinhas:
         
 class polimerase:
     def __init__(self, polimerase_selecionada, dificuldade):
-        self.img = pygame.transform.scale(pygame.image.load(f"Imagens/{polimerase_selecionada}_polimerase.png"), (200, 300))
+        self.img = pygame.image.load(f"Imagens/{polimerase_selecionada}_polimerase.png")
 
         #if polimerase_selecionada == "polimerase_teste":
         if True:

@@ -15,16 +15,16 @@ def abrir_loja(screen, clock):
 
     # Carregando recursos
     bolinhas_bg = [bolinhas() for _ in range(100)]
-    titulo = pygame.transform.scale(pygame.image.load(f"Imagens/titulo_loja.png"), (1000, 125))
+    titulo = pygame.image.load(f"Imagens/titulo_loja.png")
     fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 32)
-    moeda = pygame.transform.scale(pygame.image.load(f"Imagens/moeda.png"), (40, 50))
+    moeda = pygame.image.load(f"Imagens/moeda.png")
     erro_text = fonte.render(f"Polimerase inválida", True, VERMELHO)
     dinheiro_insuficiente_text = fonte.render(f"Dinheiro Insuficiente", True, VERMELHO)
 
     # Botões
-    botao_voltar = pygame.transform.scale(pygame.image.load(f"Imagens/botao_voltar.png"), (210, 75))
+    botao_voltar = pygame.image.load(f"Imagens/botao_voltar.png")
     voltar_rect = pygame.Rect((50, window_height - 120), (210, 75))
-    botao_seguinte = pygame.transform.scale(pygame.image.load(f"Imagens/botao_seguinte.png"), (210, 75))
+    botao_seguinte = pygame.image.load(f"Imagens/botao_seguinte.png")
     seguinte_rect = pygame.Rect((window_width - 270, window_height - 120), (210, 75))
     setas = {
         "esq_poli": pygame.Rect(300, 267.5, 50, 50),

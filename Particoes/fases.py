@@ -42,14 +42,14 @@ def rodar_fase(dificuldade, screen, clock):
         dP_fita = [dP(dificuldade, nucleotideos_fita[i].tipo, "up") for i in range(14)]
 
     # Botão de Pause
-    botao_pause = pygame.transform.scale(pygame.image.load(f"Imagens/pause_botao.png"), (40, 50))
+    botao_pause = pygame.image.load(f"Imagens/pause_botao.png")
     pause_rect = pygame.Rect((1197, 35), (40, 50))
 
     # Pontuação
     pygame.font.init()
     pontuacao_global = carregar_pontuacao()
     fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 48)
-    moeda = pygame.transform.scale(pygame.image.load(f"Imagens/moeda.png"), (40, 50))
+    moeda = pygame.image.load(f"Imagens/moeda.png")
 
     ########### WHILE ############
     clicado_index = ""

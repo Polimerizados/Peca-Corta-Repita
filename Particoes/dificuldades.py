@@ -13,11 +13,11 @@ def abrir_dificuldades(screen, clock):
     # Carregando Assets
     bolinhas_bg = [bolinhas() for _ in range(100)]
 
-    facil = pygame.transform.scale(pygame.image.load(f"Imagens/botao_facil.png"), (600, 153))
-    medio = pygame.transform.scale(pygame.image.load(f"Imagens/botao_medio.png"), (600, 153))
-    dificil = pygame.transform.scale(pygame.image.load(f"Imagens/botao_dificil.png"), (600, 153))
-    voltar = pygame.transform.scale(pygame.image.load(f"Imagens/botao_voltar.png"), (210, 75))
-    titulo = pygame.transform.scale(pygame.image.load(f"Imagens/titulo_dificuldade.png"), (1000, 125))
+    facil = pygame.image.load(f"Imagens/botao_facil.png")
+    medio = pygame.image.load(f"Imagens/botao_medio.png")
+    dificil = pygame.image.load(f"Imagens/botao_dificil.png")
+    voltar = pygame.image.load(f"Imagens/botao_voltar.png")
+    titulo = pygame.image.load(f"Imagens/titulo_dificuldade.png")
 
     # Rects dos botões
     facil_rect = pygame.Rect((340, 225), (600, 153))
