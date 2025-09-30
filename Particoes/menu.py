@@ -126,8 +126,11 @@ def abrir_menu(screen, clock):
         screen.blit(botao_l, botao_l_pos)
         screen.blit(titulo,(0, 0))
         ###### TEMPORÁRIO ######
-        if erro:
-            screen.blit(opção_indispoivel, (890, 673))
+        try:
+            if erro:
+                screen.blit(opção_indispoivel, (890, 673))
+        except:
+            erro = False
 
         ## EVENTOS
         for event in pygame.event.get():
