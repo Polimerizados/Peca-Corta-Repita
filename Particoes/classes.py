@@ -209,3 +209,40 @@ class PolimeraseSelect:
             return True
         else:
             return False
+        
+
+class Botao:
+    def __init__(self, tamanho, tamanho_hover, pos, pos_hover, imagem):
+        
+        # Define imagens e rects (normal e hover)
+        img = pygame.image.load(f"Imagens/{imagem}.png")
+        img_hover = pygame.image.load(f"Imagens/{imagem}_hover.png")
+
+        rect = pygame.Rect(pos, tamanho)
+        rect_hover =  pygame.Rect(pos_hover, tamanho_hover)
+        self.rect = rect # Rect inicial
+
+        # Armazena parâmetros
+        self.imgs = (img, img_hover)
+        self.rects = (rect, rect_hover)
+        self.tamanhos = (tamanho, tamanho_hover)
+        self.posicoes = (pos, pos_hover)
+
+
+    def draw(self, surface):
+        mouse_pos = pygame.mouse.get_pos()
+
+        hovering = self.rect.collidepoint(mouse_pos)
+
+        # Checa se o mouse está sobre o botão e define os parâmetros utilizados (normal ou hover)
+        if hovering: 
+            self.img = self.imgs[1] 
+            self.pos = self.posicoes[1] 
+            self.rect = self.rects[1]  
+        else:
+            self.img = self.imgs[0] 
+            self.pos = self.posicoes[0] 
+            self.rect = self.rects[0]
+
+        # Desenha botão
+        surface.blit(self.img, self.pos)
