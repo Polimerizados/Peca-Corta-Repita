@@ -11,3 +11,4 @@ som_on = True
 volume_m = 50
 volume_s = 50
 polimerase_selecionada = "taq"
+dados_player = {}

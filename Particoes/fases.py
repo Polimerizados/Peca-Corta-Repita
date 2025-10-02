@@ -225,6 +225,10 @@ def rodar_fase(dificuldade, screen, clock):
                     if not running:
                         from Particoes.menu import abrir_menu
                         abrir_menu(screen, clock)
+                if event.key == K_l:
+                    from Particoes.gameover import gameover
+                    running = False
+                    gameover(screen, clock, dificuldade)
 
 
         pygame.display.update()
