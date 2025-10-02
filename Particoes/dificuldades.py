@@ -20,9 +20,9 @@ def abrir_dificuldades(screen, clock):
     titulo = pygame.image.load(f"Imagens/titulo_dificuldade.png")
 
     # Rects dos botões
-    facil_rect = pygame.Rect((340, 225), (600, 153))
-    medio_rect = pygame.Rect((340, 398), (600, 153))
-    dificil_rect = pygame.Rect((340, 571), (600, 153))
+    facil_rect = pygame.Rect((65, 235), (360, 371))
+    medio_rect = pygame.Rect((462, 235), (360, 371))
+    dificil_rect = pygame.Rect((856, 235), (360, 371))
     voltar_rect = pygame.Rect((50, window_height - 120), (210, 75))
 
     ########### WHILE ############
@@ -49,9 +49,9 @@ def abrir_dificuldades(screen, clock):
         # Desenha os grounds, botões e título
         screen.blit(background, (0, 0))
         screen.blit(foreground, (0, 0))
-        screen.blit(facil, (340, 225))
-        screen.blit(medio, (340, 398))
-        screen.blit(dificil, (340, 571))
+        screen.blit(facil, (65, 235))
+        screen.blit(medio, (462, 235))
+        screen.blit(dificil, (856, 235))
         screen.blit(voltar, (50, window_height - 120))
         screen.blit(titulo,(140, 50))
 
