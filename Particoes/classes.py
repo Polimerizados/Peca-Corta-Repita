@@ -1,6 +1,7 @@
 import pygame, sys, random, os, math
 from pygame.locals import *
 from config import window_width, window_height
+from musica import tocar_som
 
 class dNTP:
     def __init__(self, level, up_down, base="random", pos="random"):
@@ -227,12 +228,14 @@ class Botao:
         self.rects = (rect, rect_hover)
         self.tamanhos = (tamanho, tamanho_hover)
         self.posicoes = (pos, pos_hover)
-
-
+            
     def draw(self, surface):
         mouse_pos = pygame.mouse.get_pos()
 
         hovering = self.rect.collidepoint(mouse_pos)
+
+        if hovering and self.rect == self.rects[0]:
+            tocar_som()
 
         # Checa se o mouse está sobre o botão e define os parâmetros utilizados (normal ou hover)
         if hovering: 

@@ -120,8 +120,9 @@ def abrir_opcoes(screen, clock):
 
     def update_m_slider_value():
         """Atualiza o valor da música"""
-        config.volume_m = int(((handle_center_m[0] - slider_x_m) / slider_width_m) * 100)
+        config.volume_m = int(((handle_center_m[0] - slider_x_m) / slider_width_m) * 200)
         config.volume_m = max(0, min(100, config.volume_m))
+        pygame.mixer.music.set_volume((config.volume_m)/100)
         
     def update_s_slider_value():
         """Atualiza o valor do som"""
@@ -173,9 +174,12 @@ def abrir_opcoes(screen, clock):
         # Check box
         if config.musica_on:
             screen.blit(check_box, (365, 243))
+            pygame.mixer.music.unpause()
+        else:
+            pygame.mixer.music.pause()
         if config.som_on:
             screen.blit(check_box, (365, 339))
-        
+            
         ## EVENTOS
         for event in pygame.event.get():
             if event.type == KEYDOWN and event.key == K_ESCAPE: # Apertou Esc
