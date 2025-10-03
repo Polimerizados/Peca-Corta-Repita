@@ -217,7 +217,7 @@ def rodar_fase(dificuldade, screen, clock):
 
         # ---- Desenha o cronômetro ----
         texto_tempo = fonte_tempo.render(f"Tempo: {tempo_restante}", True, (0, 0, 0))
-        screen.blit(texto_tempo, (window_width - 250, 20))
+        screen.blit(texto_tempo, (window_width - 310, 38))
 
         ### EVENTOS
         for event in pygame.event.get():

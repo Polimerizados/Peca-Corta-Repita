@@ -12,7 +12,7 @@ musica_on = True
 som_on = True
 volume_m = 50
 volume_s = 50
-polimerase_selecionada = "taq"
+polimerase_selecionada = "PFU"
 dados_player = {}
 
 ######### TEMPORÁRIO #########
