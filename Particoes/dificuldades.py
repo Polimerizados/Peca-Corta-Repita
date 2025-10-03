@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-from Particoes.classes import bolinhas
+from Particoes.classes import bolinhas, Botao
 from Particoes.fases import rodar_fase
 
 def abrir_dificuldades(screen, clock):
@@ -12,18 +12,14 @@ def abrir_dificuldades(screen, clock):
 
     # Carregando Assets
     bolinhas_bg = [bolinhas() for _ in range(100)]
-
-    facil = pygame.image.load(f"Imagens/botao_facil.png")
-    medio = pygame.image.load(f"Imagens/botao_medio.png")
-    dificil = pygame.image.load(f"Imagens/botao_dificil.png")
-    voltar = pygame.image.load(f"Imagens/botao_voltar.png")
     titulo = pygame.image.load(f"Imagens/titulo_dificuldade.png")
 
-    # Rects dos botões
-    facil_rect = pygame.Rect((340, 225), (600, 153))
-    medio_rect = pygame.Rect((340, 398), (600, 153))
-    dificil_rect = pygame.Rect((340, 571), (600, 153))
-    voltar_rect = pygame.Rect((50, window_height - 120), (210, 75))
+    # Botões
+    facil = Botao((360, 371), (400, 412), (65, 235), (45, 215), "botao_facil")
+    medio = Botao((360, 371), (400, 412), (462, 235), (442, 215), "botao_medio")
+    dificil = Botao((360, 371), (400, 412), (856, 235), (836, 215), "botao_dificil")
+    voltar = Botao((210, 75), (250, 89), (50, 680), (30,673), "botao_voltar")
+
 
     ########### WHILE ############
     ticking = 60
@@ -49,10 +45,10 @@ def abrir_dificuldades(screen, clock):
         # Desenha os grounds, botões e título
         screen.blit(background, (0, 0))
         screen.blit(foreground, (0, 0))
-        screen.blit(facil, (340, 225))
-        screen.blit(medio, (340, 398))
-        screen.blit(dificil, (340, 571))
-        screen.blit(voltar, (50, window_height - 120))
+        facil.draw(screen)
+        medio.draw(screen)
+        dificil.draw(screen)
+        voltar.draw(screen)
         screen.blit(titulo,(140, 50))
 
         ## EVENTOS
@@ -64,19 +60,19 @@ def abrir_dificuldades(screen, clock):
                 abrir_loja(screen, clock)
 
             if event.type == MOUSEBUTTONDOWN and event.button == 1:  # Clique com botão esquerdo
-                if facil_rect.collidepoint(event.pos): # Fácil
+                if facil.rect.collidepoint(event.pos): # Fácil
                     menu_aberto = False
                     rodar_fase("f", screen, clock)
 
-                if medio_rect.collidepoint(event.pos): # Médio
+                if medio.rect.collidepoint(event.pos): # Médio
                     menu_aberto = False
                     rodar_fase("m", screen, clock)
 
-                if dificil_rect.collidepoint(event.pos): # Difícil
+                if dificil.rect.collidepoint(event.pos): # Difícil
                     menu_aberto = False
                     rodar_fase("d", screen, clock)
 
-                if voltar_rect.collidepoint(event.pos): # Voltar
+                if voltar.rect.collidepoint(event.pos): # Voltar
                     menu_aberto = False
                     from Particoes.loja import abrir_loja
                     abrir_loja(screen, clock)

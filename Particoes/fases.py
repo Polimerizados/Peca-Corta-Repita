@@ -55,6 +55,7 @@ def rodar_fase(dificuldade, screen, clock):
     # Pontuação
     pygame.font.init()
     pontuacao_global = carregar_pontuacao()
+    pontuacao_inicial = pontuacao_global
     fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 48)
     moeda = pygame.image.load(f"Imagens/moeda.png")
 
@@ -264,6 +265,11 @@ def rodar_fase(dificuldade, screen, clock):
                     if not running:
                         from Particoes.menu import abrir_menu
                         abrir_menu(screen, clock)
+                if event.key == K_l:
+                    from Particoes.gameover import gameover
+                    running = False
+                    pontuacao = pontuacao_global - pontuacao_inicial
+                    gameover(screen, clock, dificuldade, pontuacao)
 
         pygame.display.update()
         clock.tick(60)

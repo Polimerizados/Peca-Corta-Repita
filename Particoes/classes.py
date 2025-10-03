@@ -238,3 +238,88 @@ class PolimeraseSelect:
             return True
         else:
             return False
+        
+
+class Botao:
+    def __init__(self, tamanho, tamanho_hover, pos, pos_hover, imagem):
+        
+        # Define imagens e rects (normal e hover)
+        img = pygame.image.load(f"Imagens/{imagem}.png")
+        img_hover = pygame.image.load(f"Imagens/{imagem}_hover.png")
+
+        rect = pygame.Rect(pos, tamanho)
+        rect_hover =  pygame.Rect(pos_hover, tamanho_hover)
+        self.rect = rect # Rect inicial
+
+        # Armazena parâmetros
+        self.imgs = (img, img_hover)
+        self.rects = (rect, rect_hover)
+        self.tamanhos = (tamanho, tamanho_hover)
+        self.posicoes = (pos, pos_hover)
+
+
+    def draw(self, surface):
+        mouse_pos = pygame.mouse.get_pos()
+
+        hovering = self.rect.collidepoint(mouse_pos)
+
+        # Checa se o mouse está sobre o botão e define os parâmetros utilizados (normal ou hover)
+        if hovering: 
+            self.img = self.imgs[1] 
+            self.pos = self.posicoes[1] 
+            self.rect = self.rects[1]  
+        else:
+            self.img = self.imgs[0] 
+            self.pos = self.posicoes[0] 
+            self.rect = self.rects[0]
+
+        # Desenha botão
+        surface.blit(self.img, self.pos)
+
+# Caixas de texto (para o menu)    
+class CaixaTexto:
+    def __init__(self, x, y):
+        self.posx = x
+        self.posy = y
+        self.texto = ""
+        self.ativo = True
+        self.cursor_visivel = True
+        self.cursor_ativo = True
+        self.tempo_cursor = 0
+        
+    def manipular_evento(self, evento):
+        if evento.type == pygame.KEYDOWN and self.ativo:
+            if evento.key == pygame.K_BACKSPACE: # Apertou a tecla de apagar
+                self.texto = self.texto[:-1] # Apagar último caractere
+            else:
+                # Adicionar caractere (limitar a 3 caracteres)
+                if len(self.texto) < 3:
+                    self.texto += evento.unicode
+
+        return False  # Retorna False por padrão
+    
+    def atualizar(self):
+        if len(self.texto) < 3:
+            self.cursor_ativo = True
+        else:
+            self.cursor_ativo = False
+
+        if self.cursor_ativo:
+            # Piscar o cursor
+            self.tempo_cursor += 1
+            if self.tempo_cursor > 24:  # A cada 60 frames
+                self.cursor_visivel = not self.cursor_visivel
+                self.tempo_cursor = 0
+    
+    def desenhar(self, superficie, fonte):
+        # Desenhar o texto
+        texto_surface = fonte.render(self.texto, True, (0, 0, 0))
+        superficie.blit(texto_surface, (self.posx + 20, self.posy + 3))
+        
+        # Desenhar cursor se estiver ativo
+        if self.cursor_ativo and self.cursor_visivel:
+            pygame.draw.line(superficie, (0, 0, 0), (20 + self.posx + 30*len(self.texto), self.posy + 40), (40 + self.posx + 30*len(self.texto), self.posy + 40), 3)
+    
+    def salvar(self, pontuacao, dificuldade):
+        self.ativo = False
+        return {"nome": self.texto, "pontuação": pontuacao, "dificuldade":dificuldade}

@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-from Particoes.classes import bolinhas, PolimeraseSelect
+from Particoes.classes import bolinhas, PolimeraseSelect, Botao
 import config
 import math
 
@@ -22,10 +22,8 @@ def abrir_loja(screen, clock):
     dinheiro_insuficiente_text = fonte.render(f"Dinheiro Insuficiente", True, VERMELHO)
 
     # Botões
-    botao_voltar = pygame.image.load(f"Imagens/botao_voltar.png")
-    voltar_rect = pygame.Rect((50, window_height - 120), (210, 75))
-    botao_seguinte = pygame.image.load(f"Imagens/botao_seguinte.png")
-    seguinte_rect = pygame.Rect((window_width - 270, window_height - 120), (210, 75))
+    botao_voltar = Botao((210, 75), (250, 89), (50, 680), (30,673), "botao_voltar")
+    botao_seguinte = Botao((210, 75), (250, 89), (1010, 680), (990,673), "botao_seguinte")
     setas = {
         "esq_poli": pygame.Rect(300, 267.5, 50, 50),
         "dir_poli": pygame.Rect(930, 267.5, 50, 50),
@@ -96,8 +94,8 @@ def abrir_loja(screen, clock):
         screen.blit(moeda, (1210, 20))  
         screen.blit(moeda_text, (1200-moeda_text.get_width(), 25))
 
-        screen.blit(botao_voltar, (50, window_height - 120))
-        screen.blit(botao_seguinte, (window_width - 270, window_height - 120))
+        botao_voltar.draw(screen)
+        botao_seguinte.draw(screen)
 
         # Mensagem de erro
         if erro:
@@ -162,13 +160,13 @@ def abrir_loja(screen, clock):
                             dinheiro_insuficiente = True
 
 
-                if voltar_rect.collidepoint(mx, my): # Botão voltar
+                if botao_voltar.rect.collidepoint(mx, my): # Botão voltar
                     loja_ativa = False
                     from Particoes.menu import abrir_menu
                     abrir_menu(screen, clock)
                     return None
 
-                if seguinte_rect.collidepoint(mx, my): # Botão seguinte
+                if botao_seguinte.rect.collidepoint(mx, my): # Botão seguinte
                     config.polimerase_selecionada = selecionada.tag
                     if selecionada.desbloqueado:
                         loja_ativa = False
