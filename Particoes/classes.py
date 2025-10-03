@@ -130,7 +130,7 @@ class polimerase:
             self.se_multiplo = False
         else: # Polimerase Q5            
             self.scrolling_ticks = 25
-            self.scrolling = -2
+            self.scrolling = -4
             self.se_multiplo = False
 
         self.decimo_de_ciclo = self.scrolling_ticks / 10 

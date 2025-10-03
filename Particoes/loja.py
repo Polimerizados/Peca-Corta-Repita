@@ -32,10 +32,10 @@ def abrir_loja(screen, clock):
     # Polimerases
     componentes = {
         "polimerases": [
-            {"nome": "Q5 High Fidelity", "tag": "q5", "custo": 1000, "desbloqueado": False},
+            {"nome": "Q5 High Fidelity", "tag": "q5", "custo": 1000, "desbloqueado": True},
             {"nome": "Taq Polimerase", "tag": "taq", "custo": 0, "desbloqueado": True},
             {"nome": "Phusion", "tag": "phusion", "custo": 0, "desbloqueado": True},
-            {"nome": "Pfu Polimerase", "tag": "pfu", "custo": 500, "desbloqueado": False},
+            {"nome": "Pfu Polimerase", "tag": "pfu", "custo": 500, "desbloqueado": True},
         ],
         "primers": [
             {"nome": "PrimerBank", "custo": 1500, "desbloqueado": False},
