@@ -2,6 +2,7 @@ import pygame, sys, random, os, math
 from pygame.locals import *
 from config import window_width, window_height
 from musica import tocar_som
+from math import sin, atan
 
 class dNTP:
     def __init__(self, level, up_down, base="random", pos="random"):
@@ -19,20 +20,17 @@ class dNTP:
         if self.base == "A":
             self.base_par = "T"
             self.tipo = "purica"
-        if self.base == "T":
+        elif self.base == "T":
             self.base_par = "A"
             self.tipo = "pirimidica"
-        if self.base == "C":
+        elif self.base == "C":
             self.base_par = "G"
             self.tipo = "pirimidica"
-        if self.base == "G":
+        else:
             self.base_par = "C"
             self.tipo = "purica"
     
-        if level == "m" or level == "d":
-            self.img = pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png") 
-        elif level == "f":
-            self.img = pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png")
+        self.img = pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png") 
 
         if pos == "random":
             self.pos = (random.randint(0, window_width-80), random.randint(0, window_height-100))
@@ -48,15 +46,20 @@ class dNTP:
             self.vel = (random.randint(1, 5), random.randint(-5, 5))                
         elif self.pos[0] > window_width:
             self.vel = (random.randint(-5, -1), random.randint(-5, 5))
-        elif self.pos[1] < 0:
+        if self.pos[1] < 0:
             self.vel = (random.randint(-5, 5), random.randint(1, 5))
         elif self.pos[1] > window_height:
             self.vel = (random.randint(-5, 5), random.randint(-5, -1))
         else:
             self.vel = (random.randint(-5, 5), random.randint(-5, 5))
 
-    def deslocar(self, scrolling):
-        self.pos = (self.pos[0] + self.vel[0] + scrolling, self.pos[1] + self.vel[1])
+    def deslocar(self, scrolling=0):
+        if scrolling == 0:
+            self.pos = (self.pos[0] + self.vel[0], self.pos[1] + self.vel[1])
+        else:
+            self.pos = (self.pos[0] + 2*scrolling, self.pos[1] + self.vel[1])
+
+
 
 class ligH:
     def __init__(self, base, base_par):
@@ -78,10 +81,14 @@ class dP:
         if level == "m" or level == "d":
             self.img = pygame.image.load(f"Imagens/f{level}_dP_{tipo}_{up_down}.png")
 
-class bolinhas:
-    def __init__(self):
 
-        self.pos = (random.randint(0, window_width-80), random.randint(0, window_height-100))
+
+class bolinhas:
+    def __init__(self, pos="random"):
+        if pos == "random":
+            self.pos = (random.randint(0, window_width-80), random.randint(0, window_height-100))
+        else:
+            self.pos = pos
         self.tick = random.randint(0, 59)
         self.vel = (random.randint(-3, 3), random.randint(-3, 3))
         self.img = pygame.transform.scale(pygame.image.load(f"Imagens/bolinha.png"), (10, 10)) 
@@ -101,15 +108,37 @@ class bolinhas:
     def deslocar(self, scrolling):
         self.pos = (self.pos[0] + self.vel[0] + scrolling / 2, self.pos[1] + self.vel[1])
         
-class polimerase:
-    def __init__(self, polimerase_selecionada, dificuldade):
-        self.img = pygame.image.load(f"Imagens/{polimerase_selecionada}_polimerase.png")
 
-        #if polimerase_selecionada == "polimerase_teste":
-        if True:
-            self.scrolling_ticks = 200 # Imagem 100X100
+
+class polimerase:
+    def __init__(self, polimerase_selecionada, dificuldade, pos):
+        self.img = pygame.image.load(f"Imagens/{polimerase_selecionada}_polimerase.png")
+        self.pos_original = pos
+        self.pos = [self.pos_original[0], self.pos_original[1]] # Lista, para poder manipular
+        self.sentido = 1 # 1 cima, -1 baixo
+        self_aceleracao_vertical = 2/5
+
+        if polimerase_selecionada == "taq":
+            self.scrolling_ticks = 200 # Imagem 100X100, mas o dobro de ticks
             self.scrolling = -1 # 1 pixel por tick confirmado
             self.se_multiplo = True # pulando 1 tick sim, 1 não, 3,333 sec para cada pareamento
+        elif polimerase_selecionada ==  "phusion":
+            self.scrolling_ticks = 100
+            self.scrolling = -1 # 1,666 sec para cada pareamento
+            self.se_multiplo = False
+        elif polimerase_selecionada == "PFU":
+            self.scrolling_ticks = 50
+            self.scrolling = -2 # 0,888 sec para cada pareamento
+            self.se_multiplo = False
+        else: # Polimerase Q5
+            
+            """MANUTENÇÃO --- CHECAR COMO SERÁ"""
+            
+            self.scrolling_ticks = 100
+            self.scrolling = -1 
+            self.se_multiplo = False
+
+
 
 class PolimeraseSelect:
     def __init__(self, cx, cy, raio, dicionario, scale=185, img="taq_polimerase_select", vel_ang=2, pos_inicial=0):

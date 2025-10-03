@@ -25,10 +25,6 @@ def abrir_menu(screen, clock):
     botao_opcoes = Botao(tamanho_botoes, tamanho_hover, (440, 493), (400, 478), "botao_opcoes")
     botao_leaderboard = Botao(tamanho_botoes, tamanho_hover, (440, 630), (400, 614), "botao_leaderboard") 
 
-    ###### TEMPORÁRIO ######
-    mini_font = pygame.font.Font("Fontes/gliker-regular.ttf", 25)
-    opção_indispoivel = mini_font.render(f"Opção indisponível", True, (255, 0, 0))
-
     ########### WHILE ############
     ticking = 60
     menu_aberto = True
@@ -57,13 +53,6 @@ def abrir_menu(screen, clock):
         botao_opcoes.draw(screen)
         botao_leaderboard.draw(screen)
         screen.blit(titulo,(0, 0))
-        
-        ###### TEMPORÁRIO ######
-        try:
-            if erro:
-                screen.blit(opção_indispoivel, (890, 673))
-        except:
-            erro = False
 
         ## EVENTOS
         for event in pygame.event.get():
@@ -79,8 +68,9 @@ def abrir_menu(screen, clock):
                     menu_aberto = False
                     abrir_opcoes(screen, clock)
                 if botao_leaderboard.rect.collidepoint(event.pos): # Botão de leaderboard
-                    ###### TEMPORÁRIO ######
-                    erro = True
+                    menu_aberto = False
+                    from Particoes.leaderboard import abrir_classificacao
+                    abrir_classificacao(screen, clock)
                     
 
         pygame.display.update()

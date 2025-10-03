@@ -37,7 +37,7 @@ while True:
     screen.blit(main_menu, (0, 0))
 
     for event in pygame.event.get():
-        if event.type == KEYDOWN: # Teclado
+        if event.type == KEYDOWN: # Teclado 
 
             if event.key == K_ESCAPE: # Esc
                 pygame.quit()
@@ -45,6 +45,6 @@ while True:
 
             if event.key == K_SPACE: # Espaço
                 abrir_menu(screen, clock)
-                              
+                            
     pygame.display.update()
     clock.tick(60)
