@@ -1,7 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 from Particoes.classes import bolinhas, Botao
-from Particoes.loja import abrir_loja
+from Particoes.dificuldades import abrir_dificuldades
 from Particoes.opcoes import abrir_opcoes
 
 def abrir_menu(screen, clock):
@@ -63,7 +63,7 @@ def abrir_menu(screen, clock):
             if event.type == MOUSEBUTTONDOWN and event.button == 1:  # Clique com botão esquerdo
                 if botao_jogar.rect.collidepoint(event.pos): # Botão de jogar
                     menu_aberto = False
-                    abrir_loja(screen, clock)
+                    abrir_dificuldades(screen, clock)
                 if botao_opcoes.rect.collidepoint(event.pos): # Botão de opções
                     menu_aberto = False
                     abrir_opcoes(screen, clock)

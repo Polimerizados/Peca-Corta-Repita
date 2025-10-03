@@ -56,8 +56,8 @@ def abrir_dificuldades(screen, clock):
 
             if event.type == KEYDOWN and event.key == K_ESCAPE: # Esc
                 menu_aberto = False
-                from Particoes.loja import abrir_loja
-                abrir_loja(screen, clock)
+                from Particoes.menu import abrir_menu
+                abrir_menu(screen, clock)
 
             if event.type == MOUSEBUTTONDOWN and event.button == 1:  # Clique com botão esquerdo
                 if facil.rect.collidepoint(event.pos): # Fácil
@@ -74,8 +74,8 @@ def abrir_dificuldades(screen, clock):
 
                 if voltar.rect.collidepoint(event.pos): # Voltar
                     menu_aberto = False
-                    from Particoes.loja import abrir_loja
-                    abrir_loja(screen, clock)
+                    from Particoes.menu import abrir_menu
+                    abrir_menu(screen, clock)
 
         pygame.display.update()
         clock.tick(60)
