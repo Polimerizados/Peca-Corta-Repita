@@ -12,3 +12,8 @@ volume_m = 50
 volume_s = 50
 polimerase_selecionada = "taq"
 dados_player = {}
+
+######### TEMPORÁRIO #########
+lista_dados_f = []
+lista_dados_m = []
+lista_dados_d = []
