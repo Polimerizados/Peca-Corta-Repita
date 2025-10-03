@@ -22,6 +22,8 @@ def gameover(screen, clock, dificuldade, pontuacao):
 
     fim_de_jogo = pygame.image.load(f"Imagens/fim_de_jogo.png")
     fim_de_jogo_s = pygame.image.load(f"Imagens/fim_de_jogo_s.png")
+    fim_de_jogo_nhs = pygame.image.load(f"Imagens/fim_de_jogo_nhs.png")
+    fim_de_jogo_nhs_s = pygame.image.load(f"Imagens/fim_de_jogo_nhs_s.png")
 
     # Rect para a identificação dos botões
     rect_sair = pygame.Rect((813, 555), (159, 119))
@@ -39,6 +41,26 @@ def gameover(screen, clock, dificuldade, pontuacao):
     # Carregar pontuacao
     texto_pontuacao = mega_fonte.render(str(pontuacao), True, (0, 0, 0))
     pos_pontuacao = (640 - (texto_pontuacao.get_width() / 2), 285)
+
+    # Checa novo record
+    if dificuldade == "f":
+        if len(config.lista_dados_f) > 0 and pontuacao <= config.lista_dados_f[0]["pontuação"]:
+            recorde = False
+        else:
+            recorde = True
+  
+    if dificuldade == "m":
+        if len(config.lista_dados_m) > 0 and pontuacao <= config.lista_dados_m[0]["pontuação"]:
+            recorde = False
+        else:
+            recorde = True
+    
+    if dificuldade == "d":
+        if len(config.lista_dados_d) > 0 and pontuacao <= config.lista_dados_d[0]["pontuação"]:
+            recorde = False
+        else:
+            recorde = True
+
 
     # Textos de erro
     texto_erro = mini_fonte.render("Seu nome precisa conter 3 caracteres", True, (255, 0, 0))
@@ -63,10 +85,16 @@ def gameover(screen, clock, dificuldade, pontuacao):
             ticking = 0
 
         # Desenha tela de fim de jogo
-        if salvo:
-            screen.blit(fim_de_jogo_s, (265, 84))
+        if recorde:
+            if salvo:    
+                screen.blit(fim_de_jogo_nhs_s, (265, 84))
+            else:
+                screen.blit(fim_de_jogo_nhs, (265, 84))
         else:
-            screen.blit(fim_de_jogo, (265, 84))
+            if salvo:    
+                screen.blit(fim_de_jogo_s, (265, 84))
+            else:
+                screen.blit(fim_de_jogo, (265, 84))
 
         # Desenha pontuação
         screen.blit(texto_pontuacao, pos_pontuacao)
