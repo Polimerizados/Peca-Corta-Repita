@@ -59,6 +59,11 @@ def rodar_fase(dificuldade, screen, clock):
     fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 48)
     moeda = pygame.image.load(f"Imagens/moeda.png")
 
+    # -------- CRONÔMETRO 30s --------
+    tempo_total = 30_000  # 30 segundos em ms
+    inicio_tempo = pygame.time.get_ticks()
+    fonte_tempo = pygame.font.Font("Fontes/gliker-regular.ttf", 36)
+
     ########### WHILE ############
     clicado_index = ""
     ticking = 60
@@ -71,6 +76,17 @@ def rodar_fase(dificuldade, screen, clock):
     running = True
 
     while running:
+        # Verifica tempo restante
+        tempo_passado = pygame.time.get_ticks() - inicio_tempo
+        tempo_restante = max(0, (tempo_total - tempo_passado) // 1000)
+
+        if tempo_restante == 0:  # acabou o tempo
+            from Particoes.gameover import gameover
+            running = False
+            pontuacao = pontuacao_global - pontuacao_inicial
+            gameover(screen, clock, dificuldade, pontuacao)
+            break
+
         # Para diferenciar passagens de tempo
         if ticking < 60:
             ticking += 1
@@ -198,9 +214,13 @@ def rodar_fase(dificuldade, screen, clock):
         screen.blit(moeda, (40 + texto_amino.get_width(), 25))
         screen.blit(texto_amino, (30, 20))
 
+        # ---- Desenha o cronômetro ----
+        texto_tempo = fonte_tempo.render(f"Tempo: {tempo_restante}", True, (0, 0, 0))
+        screen.blit(texto_tempo, (window_width - 250, 20))
+
         ### EVENTOS
         for event in pygame.event.get():
-            
+
             if event.type == MOUSEBUTTONDOWN: # Clique
                 # Identifica se clicou em uma dNTP livre
                 mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -218,7 +238,7 @@ def rodar_fase(dificuldade, screen, clock):
                         from Particoes.menu import abrir_menu
                         abrir_menu(screen, clock)
 
-            # Identifica quando se solta a dNTP, se a liberta, se em cima da fita
+            # Identifica quando se solta a dNTP, se a liberta, se em cima da fita   
             if event.type == MOUSEBUTTONUP:
                 diff_x = -1
                 diff_y = -1
