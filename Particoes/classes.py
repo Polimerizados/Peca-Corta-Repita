@@ -115,8 +115,6 @@ class polimerase:
         self.img = pygame.image.load(f"Imagens/{polimerase_selecionada}_polimerase.png")
         self.pos_original = pos
         self.pos = [self.pos_original[0], self.pos_original[1]] # Lista, para poder manipular
-        self.sentido = 1 # 1 cima, -1 baixo
-        self_aceleracao_vertical = 2/5
 
         if polimerase_selecionada == "taq":
             self.scrolling_ticks = 200 # Imagem 100X100, mas o dobro de ticks
@@ -130,13 +128,27 @@ class polimerase:
             self.scrolling_ticks = 50
             self.scrolling = -2 # 0,888 sec para cada pareamento
             self.se_multiplo = False
-        else: # Polimerase Q5
-            
-            """MANUTENÇÃO --- CHECAR COMO SERÁ"""
-            
-            self.scrolling_ticks = 100
-            self.scrolling = -1 
+        else: # Polimerase Q5            
+            self.scrolling_ticks = 25
+            self.scrolling = -2
             self.se_multiplo = False
+
+        self.decimo_de_ciclo = self.scrolling_ticks / 10 
+        self.key_cima = 0
+         
+    def car_tremble(self, scroll_ticks):
+
+        if self.pos[1] == self.pos_original[1]:
+            self.key_cima = self.decimo_de_ciclo
+
+        if self.key_cima > 0:
+            s_pos = 10 * (scroll_ticks % self.decimo_de_ciclo) ** 3 / self.decimo_de_ciclo ** 3
+            self.key_cima -= 1
+
+        else:
+            s_pos = (self.decimo_de_ciclo ** 3 * scroll_ticks / 10) ** (1/3)
+
+        self.pos = [self.pos_original[0], self.pos_original[1] + int(s_pos)]
 
 
 

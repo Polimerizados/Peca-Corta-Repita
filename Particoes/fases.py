@@ -125,6 +125,7 @@ def rodar_fase(dificuldade, screen, clock):
                 inicio_x_fita += scroll_vel
 
             scroll_ticks += 1
+            pol.car_tremble(scroll_ticks)
 
         # Limpa os grounds
         background.blit(cleaner, (0, 0))
