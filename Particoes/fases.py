@@ -12,6 +12,7 @@ def rodar_fase(dificuldade, screen, clock):
     background = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
     background.fill(pygame.Color(240, 240, 240, 255))
     midground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
+    pygame.Surface.set_alpha(midground, 230)
     foreground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
     cleaner = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
     cleaner.fill(pygame.Color(255, 255, 255, 255))
@@ -21,23 +22,29 @@ def rodar_fase(dificuldade, screen, clock):
     diff_x = 0
     diff_y = 0
 
-    # Bolinhas background
-    bolinhas_bg = [bolinhas() for _ in range(100)]
+    #Bolinhas background
+    bolinhas_bg = [bolinhas() for _ in range(200)]
 
     ### Fita
     inicio_x_fita = 0
     polimerase_selecionada = config.polimerase_selecionada
-    pol = polimerase(polimerase_selecionada, dificuldade)
-    nucleotideos_fita = [dNTP(dificuldade, "up", "random", (100*i, window_height-190)) for i in range(14)]
+    pol = polimerase(polimerase_selecionada, dificuldade, [550, window_height-320])
+    pygame.Surface.set_alpha(pol.img, 100)
+
+    nucleotideos_fita = [dNTP(dificuldade, "up", base="random", pos=(100*i, window_height-190)) for i in range(14)]
     dP_contra_fita = [0] * 14
     contra_fita = [0] * 14
     lista_ligH = [0] * 14
+
     for i in range(14):
+
         if 100 * i < 550:
             contra_fita[i] = dNTP(dificuldade, "down", nucleotideos_fita[i].base_par, (inicio_x_fita+100*i, window_height-240))
+           
             if dificuldade == "m" or dificuldade == "d":
                 dP_contra_fita[i] = dP(dificuldade, contra_fita[i].tipo, "down")
                 lista_ligH[i] = ligH(nucleotideos_fita[i].base, nucleotideos_fita[i].base_par)
+
     if dificuldade == "m" or dificuldade == "d":
         dP_fita = [dP(dificuldade, nucleotideos_fita[i].tipo, "up") for i in range(14)]
 
@@ -61,11 +68,11 @@ def rodar_fase(dificuldade, screen, clock):
     clicado_index = ""
     ticking = 60
     pula_tick = pol.se_multiplo # Com a polimerase teste, será 1 pixel por 2 ticks
-    scroll_vel = 0
-    scroll_ticks = 1
-    scroll_ticks_max = 0
-    qnt_ticks_max = 0
-    qnt_scrolls = 0
+    scroll_vel = 0 # "Velocidade de scroll"
+    scroll_ticks = 1 # Quantos ticks já foram
+    scroll_ticks_max = 0 # Quantas vezes se há de scrollar (para vezes em que se coloca base enquanto a animação roda)
+    qnt_ticks_max = 0 # Quantos ticks tem que dar para terminar a animação
+    qnt_scrolls = 0 # Quantas fitas já foram colocadas e scrolladas
     running = True
 
     while running:
@@ -86,32 +93,38 @@ def rodar_fase(dificuldade, screen, clock):
         else:
             ticking = 0
 
-        # "Animação" paralela do scrolling
+        # Animação paralela do scrolling
         if scroll_vel != 0:
-            if qnt_ticks_max > 0:
-                if scroll_ticks == scroll_ticks_max:
-                    qnt_scrolls += 1
-                    scroll_ticks = 1
-                    qnt_ticks_max += -1
-                    nucleotideos_fita.pop(0)
-                    nucleotideos_fita.append(dNTP(dificuldade, "up", "random", (100*13, window_height-190)))
-                    contra_fita.pop(0)
-                    contra_fita.append(0)
-                    if dificuldade == "m" or dificuldade == "d":
-                        dP_fita.pop(0)
-                        dP_fita.append(dP(dificuldade, nucleotideos_fita[13].tipo, "up"))
-                        dP_contra_fita.pop(0)
-                        dP_contra_fita.append(0)
-                        lista_ligH.pop(0)
-                        lista_ligH.append(0)
-            else:
+            
+            if qnt_ticks_max == 0: # Finalizar a animação
                 scroll_vel = 0
-                scroll_ticks = 1
+                scroll_ticks = 0
                 scroll_ticks_max = 0
-            scroll_ticks += 1
-            if pula_tick == True:
+
+            elif scroll_ticks == scroll_ticks_max: # Reseta 1 scroll
+                qnt_scrolls += 1
+                scroll_ticks = 0
+                qnt_ticks_max += -1
+                nucleotideos_fita.pop(0)
+                nucleotideos_fita.append(dNTP(dificuldade, "up", base="random", pos=(100*13, window_height-190)))
+                contra_fita.pop(0)
+                contra_fita.append(0)
+                if dificuldade != "f":
+                    dP_fita.pop(0)
+                    dP_fita.append(dP(dificuldade, nucleotideos_fita[13].tipo, "up"))
+                    dP_contra_fita.pop(0)
+                    dP_contra_fita.append(0)
+                    lista_ligH.pop(0)
+                    lista_ligH.append(0)
+
+            if pol.se_multiplo:
+                if pula_tick:
+                    inicio_x_fita += scroll_vel
+                pula_tick = not pula_tick
+            else:
                 inicio_x_fita += scroll_vel
-            pula_tick = not pula_tick
+
+            scroll_ticks += 1
 
         # Limpa os grounds
         background.blit(cleaner, (0, 0))
@@ -120,9 +133,11 @@ def rodar_fase(dificuldade, screen, clock):
         foreground.fill((0, 0, 0, 0))
 
         ### BACKGROUND
-        for i in range(100):
+        for i in range(200):
+            
+            # PACMAN Bolinhas (apenas horizontal)
             if bolinhas_bg[i].pos[0] < -11:
-                bolinhas_bg[i] = bolinhas()
+                bolinhas_bg[i] = bolinhas(pos=(window_width + 5, random.randint(0, window_height-100)))
             if ticking == bolinhas_bg[i].tick:
                 bolinhas_bg[i].acelerar()
             bolinhas_bg[i].deslocar(scroll_vel)
@@ -131,13 +146,39 @@ def rodar_fase(dificuldade, screen, clock):
         ### MIDGROUND
         # Atualiza as posições de tempo em tempo, sob o mouse ou aleatoriamente
         for i in range(24):
+            cada_dntp = dNTPs_livres[i]
+            
+             # PACMAN dNTPs
+            if cada_dntp.pos[0] < -130:
+                dNTPs_livres.pop(i)
+                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(window_width + 10, random.randint(0, window_height-100)))
+                dNTPs_livres.insert(i, novo_dNTP)
+
+            elif cada_dntp.pos[0] > window_width + 30:
+                dNTPs_livres.pop(i)
+                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(-90, random.randint(0, window_height-100)))
+                dNTPs_livres.insert(i, novo_dNTP)
+
+            elif cada_dntp.pos[1] < -130:
+                dNTPs_livres.pop(i)
+                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(random.randint(0, window_width-80), window_height + 10))
+                dNTPs_livres.insert(i, novo_dNTP)
+
+            elif cada_dntp.pos[1] > window_height + 30:
+                dNTPs_livres.pop(i)
+                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(random.randint(0, window_width-80), -110))
+                dNTPs_livres.insert(i, novo_dNTP)
+
+            # Mantém o dNTP sob o mouse
             if i == clicado_index:
                 dNTPs_livres[clicado_index].pos = tuple(a - b for a, b in zip(pygame.mouse.get_pos(), (diff_x, diff_y)))
+
+            # Movimento dos dNTPs livres
             else:
-                # Força a volta das bases que saírem da tela
-                if ticking == dNTPs_livres[i].tick:
-                    dNTPs_livres[i].acelerar()
-                dNTPs_livres[i].deslocar(scroll_vel)
+                if ticking == cada_dntp.tick:
+                    cada_dntp.acelerar()
+                cada_dntp.deslocar(scrolling=scroll_vel)
+
             midground.blit(dNTPs_livres[i].img, dNTPs_livres[i].pos)
 
         ### FOREGROUND
@@ -148,7 +189,7 @@ def rodar_fase(dificuldade, screen, clock):
             if dificuldade == "f":
                 nucleotideos_fita[i].pos = (inicio_x_fita+100*(i+qnt_scrolls), window_height-170)
                 foreground.blit(nucleotideos_fita[i].img, nucleotideos_fita[i].pos)
-            if dificuldade == "m" or dificuldade == "d":
+            else: # Dificuldade "m" ou "d"
                 nucleotideos_fita[i].pos = (inicio_x_fita+100*(i+qnt_scrolls), window_height-190)
                 foreground.blit(nucleotideos_fita[i].img, nucleotideos_fita[i].pos)
                 foreground.blit(dP_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-110))
@@ -157,7 +198,7 @@ def rodar_fase(dificuldade, screen, clock):
             if dificuldade == "f":
                 pygame.draw.rect(foreground, "aqua", ((inicio_x_fita+100*(i+qnt_scrolls), window_height-235), (120, 40)))
                 foreground.blit(contra_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-245))
-            if dificuldade == "m" or dificuldade == "d":
+            else: # Dificuldade "m" ou "d"
                 foreground.blit(contra_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-240))
                 foreground.blit(dP_contra_fita[i].img, (inicio_x_fita+100*(i+qnt_scrolls), window_height-300))
                 if nucleotideos_fita[i].base_par == contra_fita[i].base:
@@ -167,8 +208,7 @@ def rodar_fase(dificuldade, screen, clock):
         screen.blit(background, (0, 0))
         screen.blit(midground, (0, 0))
         screen.blit(foreground, (0, 0))
-        pygame.Surface.set_alpha(pol.img, 100)
-        screen.blit(pol.img, (550, window_height-320))
+        screen.blit(pol.img, pol.pos)
         screen.blit(botao_pause, (1197, 35))
         texto_amino = fonte.render(f"{pontuacao_global}", True, (220, 190, 90))
         screen.blit(moeda, (40 + texto_amino.get_width(), 25))
@@ -250,7 +290,6 @@ def rodar_fase(dificuldade, screen, clock):
                     running = False
                     pontuacao = pontuacao_global - pontuacao_inicial
                     gameover(screen, clock, dificuldade, pontuacao)
-
 
         pygame.display.update()
         clock.tick(60)
