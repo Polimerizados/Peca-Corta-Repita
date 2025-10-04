@@ -26,9 +26,6 @@ def carregar_pontuacao():
     return 0
 
 
-########### MÚSICA ############
-
-tocar_musica("Particoes/macacos_me_mordam.wav")
 
 ########### WHILE ############
 while True: 

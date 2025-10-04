@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath("Particoes"))
 from classes import dNTP, ligH, dP, bolinhas, polimerase
 from config import window_width, window_height, screen, clock
 import config
+from musica import tocar_musica
 
 def rodar_fase(dificuldade, screen, clock):
     ####### ESCOPO DA FASE #######
@@ -63,6 +64,11 @@ def rodar_fase(dificuldade, screen, clock):
     tempo_total = 30_000  # 30 segundos em ms
     inicio_tempo = pygame.time.get_ticks()
     fonte_tempo = pygame.font.Font("Fontes/gliker-regular.ttf", 36)
+
+    # Música
+    musicas = ["(EXTRA) PATIFARIA ESPACIAL.ogg","GELEIA MICROBIOTICA.ogg", "PELAS BARBAS DO PROFETA.ogg"]
+    musica_selecionada = random.choice(musicas)
+    tocar_musica(f"musicas/{musica_selecionada}")
 
     ########### WHILE ############
     clicado_index = ""
@@ -216,7 +222,7 @@ def rodar_fase(dificuldade, screen, clock):
         screen.blit(texto_amino, (30, 20))
 
         # ---- Desenha o cronômetro ----
-        texto_tempo = fonte_tempo.render(f"Tempo: {tempo_restante}", True, (0, 0, 0))
+        texto_tempo = fonte_tempo.render(f"Tempo: {tempo_restante}", True, (98, 188, 221))
         screen.blit(texto_tempo, (window_width - 310, 38))
 
         ### EVENTOS

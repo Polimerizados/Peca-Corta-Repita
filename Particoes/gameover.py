@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 from Particoes.classes import CaixaTexto
 import config
+from musica import tocar_musica
 
 # Tenta importar o módulo de rede (opcional)
 try:
@@ -71,6 +72,9 @@ def gameover(screen, clock, dificuldade, pontuacao):
 
     texto_nome = mini_fonte.render("Esse nome já está no placar", True, (255, 0, 0))
     erro_nome = False
+
+    # Música
+    tocar_musica("musicas/macacos_me_mordam.wav")
 
     ########### WHILE ############
     ticking = 60

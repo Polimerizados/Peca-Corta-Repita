@@ -22,7 +22,7 @@ def abrir_opcoes(screen, clock):
     menu_opcoes = pygame.image.load(f"Imagens/menu_opcoes.png")
 
     # Botão de voltar
-    botao_voltar = Botao((210, 75), (250, 89), (50, 680), (30,673), "botao_voltar")
+    botao_voltar = pygame.Rect(50, 680, 210, 75)
 
     ## SLIDER MÚSICA
     # Configurações do slider
@@ -162,9 +162,6 @@ def abrir_opcoes(screen, clock):
         else:
             screen.blit(menu_opcoes, (0, 0))
 
-        # Desenha Botão de voltar
-        botao_voltar.draw(screen)
-
         # Idioma
         texto_idioma = font.render(config.idioma, True, BLACK)
         screen.blit(texto_idioma, (375, 427)) 
@@ -202,7 +199,7 @@ def abrir_opcoes(screen, clock):
                     config.idioma = "Español"   
 
                 # Botão de sair
-                elif botao_voltar.rect.collidepoint(event.pos):
+                elif botao_voltar.collidepoint(event.pos):
                     opcoes_aberto = False
                     from Particoes.menu import abrir_menu
                     abrir_menu(screen, clock)
