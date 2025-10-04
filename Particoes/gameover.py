@@ -153,10 +153,9 @@ def gameover(screen, clock, dificuldade, pontuacao):
                         # função auxiliar local para checar existência e inserir
                         def inserir_se_vazio(lista, novo):
                             nomes = [dado.get("nome") for dado in lista]
-                            if novo.get("nome") not in nomes:
-                                lista.append(novo)
-                                return True
-                            return False
+                            lista.append(novo)
+                            return True
+                            
 
                         inseriu = False
                         if dificuldade == "f":
