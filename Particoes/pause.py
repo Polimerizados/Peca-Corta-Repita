@@ -41,6 +41,7 @@ def pausar(screen, clock):
     dragging_m = False
 
     ## SLIDER SOM
+    musica_pausou = False
     # Configurações do slider
     slider_x_s = 520
     slider_y_s = 359
@@ -120,12 +121,15 @@ def pausar(screen, clock):
         """Atualiza o valor da música"""
         config.volume_m = int(((handle_center_m[0] - slider_x_m) / slider_width_m) * 100)
         config.volume_m = max(0, min(100, config.volume_m))
+        pygame.mixer.music.set_volume((config.volume_m)/100)
         
     def update_s_slider_value():
         """Atualiza o valor do som"""
         config.volume_s = int(((handle_center_s[0] - slider_x_s) / slider_width_s) * 100)
         config.volume_s = max(0, min(100, config.volume_s))
 
+    ########### WHILE ############
+    
     ticking = 60
     p_running = True
     pausado = True
@@ -152,8 +156,16 @@ def pausar(screen, clock):
         # Check box
         if config.musica_on:
             screen.blit(check_box, (463, 276))
+            if musica_pausou:
+                pygame.mixer.music.unpause()
+                musica_pausou = False
+        else:
+            pygame.mixer.music.pause()
+            musica_pausou = True
+
         if config.som_on:
             screen.blit(check_box, (463, 341))
+
         
         ## EVENTOS
         for event in pygame.event.get():

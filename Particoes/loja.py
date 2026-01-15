@@ -4,6 +4,7 @@ from Particoes.classes import bolinhas, PolimeraseSelect, Botao
 import config
 import math
 
+
 def abrir_loja(screen, clock):
     window_width, window_height = screen.get_size()
 

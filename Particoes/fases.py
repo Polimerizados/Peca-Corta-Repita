@@ -1,12 +1,9 @@
 import pygame, sys, random, os
 from pygame.locals import *
-sys.path.append(os.path.abspath(".."))
-from Particoes.utils import salvar_pontuacao, carregar_pontuacao
-sys.path.append(os.path.abspath("Particoes"))
-from classes import dNTP, ligH, dP, bolinhas, polimerase
-from config import window_width, window_height, screen, clock
-import config
-from musica import tocar_musica
+from Particoes.classes import dNTP, ligH, dP, bolinhas, polimerase
+from Particoes.musica import tocar_musica
+from config import window_width, window_height, screen, clock, salvar_pontuacao, carregar_pontuacao, polimerase_selecionada
+
 
 def rodar_fase(dificuldade, screen, clock):
     ####### ESCOPO DA FASE #######
@@ -28,7 +25,6 @@ def rodar_fase(dificuldade, screen, clock):
 
     ### Fita
     inicio_x_fita = 0
-    polimerase_selecionada = config.polimerase_selecionada
     pol = polimerase(polimerase_selecionada, dificuldade, [550, window_height-320])
     pygame.Surface.set_alpha(pol.img, 100)
 
@@ -237,11 +233,14 @@ def rodar_fase(dificuldade, screen, clock):
                     if 80 >= diff_x >= 0 and 100 >= diff_y >= 0:  
                         clicado_index = i
                         break
+                    
                 # Identifica se clicou no botão de pause
                 if pause_rect.collidepoint(event.pos):
                     from Particoes.pause import pausar
                     running = pausar(screen, clock)
+                    
                     if not running:
+                        pygame.mixer.music.stop()
                         from Particoes.menu import abrir_menu
                         abrir_menu(screen, clock)
 
@@ -284,6 +283,7 @@ def rodar_fase(dificuldade, screen, clock):
             if event.type == KEYDOWN: # Teclado
                 if event.key == K_ESCAPE: # Esc
                     running = False
+                    pygame.mixer.music.stop()
                     from Particoes.dificuldades import abrir_dificuldades
                     abrir_dificuldades(screen, clock)
                 if event.key == K_p: # P (pause)

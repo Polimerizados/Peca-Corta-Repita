@@ -18,13 +18,16 @@ def abrir_opcoes(screen, clock):
     screen.fill(pygame.Color(255, 255, 255, 0))
     background = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
     background.fill(pygame.Color(255, 255, 255, 0))
+    foreground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
+    foreground.fill(pygame.Color(255, 255, 255, 0))
 
     menu_opcoes = pygame.image.load(f"Imagens/menu_opcoes.png")
 
     # Botão de voltar
-    botao_voltar = pygame.Rect(50, 680, 210, 75)
+    botao_voltar = Botao((210, 75), (287, 103), (50, 680), (30, 672), "botao_voltar")
 
     ## SLIDER MÚSICA
+    musica_pausou = False
     # Configurações do slider
     slider_x_m = 453
     slider_y_m = 268
@@ -99,28 +102,28 @@ def abrir_opcoes(screen, clock):
     def draw_slider():
         """Desenha slider de música e de som"""
         # Slider musica
-        draw_rounded_rect(screen, GRAY, slider_rect_m, 7.5)
+        draw_rounded_rect(foreground, GRAY, slider_rect_m, 7.5)
 
-        draw_rounded_rect(screen, BLACK, hover_slider_rect_m, 7.5)
+        draw_rounded_rect(foreground, BLACK, hover_slider_rect_m, 7.5)
 
-        pygame.draw.circle(screen, BLACK, handle_center_m, handle_radius_m)
+        pygame.draw.circle(foreground, BLACK, handle_center_m, handle_radius_m)
 
         value_text = font.render(f"{config.volume_m}", True, BLACK)
-        screen.blit(value_text, (slider_x_m + slider_width_m + 20, slider_y_m-25))
+        foreground.blit(value_text, (slider_x_m + slider_width_m + 20, slider_y_m-25))
 
         # Slider som
-        draw_rounded_rect(screen, GRAY, slider_rect_s, 7.5)
+        draw_rounded_rect(foreground, GRAY, slider_rect_s, 7.5)
 
-        draw_rounded_rect(screen, BLACK, hover_slider_rect_s, 7.5)
+        draw_rounded_rect(foreground, BLACK, hover_slider_rect_s, 7.5)
 
-        pygame.draw.circle(screen, BLACK, handle_center_s, handle_radius_s)
+        pygame.draw.circle(foreground, BLACK, handle_center_s, handle_radius_s)
 
         value_text = font.render(f"{config.volume_s}", True, BLACK)
-        screen.blit(value_text, (slider_x_s + slider_width_s + 20, slider_y_s-25))
+        foreground.blit(value_text, (slider_x_s + slider_width_s + 20, slider_y_s-25))
 
     def update_m_slider_value():
         """Atualiza o valor da música"""
-        config.volume_m = int(((handle_center_m[0] - slider_x_m) / slider_width_m) * 200)
+        config.volume_m = int(((handle_center_m[0] - slider_x_m) / slider_width_m) * 100)
         config.volume_m = max(0, min(100, config.volume_m))
         pygame.mixer.music.set_volume((config.volume_m)/100)
         
@@ -128,7 +131,6 @@ def abrir_opcoes(screen, clock):
         """Atualiza o valor do som"""
         config.volume_s = int(((handle_center_s[0] - slider_x_s) / slider_width_s) * 100)
         config.volume_s = max(0, min(100, config.volume_s))
-
 
     ########### WHILE ############
 
@@ -145,6 +147,7 @@ def abrir_opcoes(screen, clock):
 
         # Limpa as camadas
         background.fill((255, 255, 255, 255))  
+        foreground.fill((255, 255, 255, 0))  
 
         # Desenha as bolinhas
         for i in range(100):
@@ -153,29 +156,38 @@ def abrir_opcoes(screen, clock):
             bolinhas_bg[i].deslocar(0)
             background.blit(bolinhas_bg[i].img, bolinhas_bg[i].pos)
 
-        # Desenha grounds
-        screen.blit(background, (0, 0))
-
         # Desenha menu
         if selecionando_idioma:
-            screen.blit(menu_opcoes_idioma, (0, 0))
+            foreground.blit(menu_opcoes_idioma, (0, 0))
         else:
-            screen.blit(menu_opcoes, (0, 0))
+            foreground.blit(menu_opcoes, (0, 0))
 
         # Idioma
         texto_idioma = font.render(config.idioma, True, BLACK)
-        screen.blit(texto_idioma, (375, 427)) 
+        foreground.blit(texto_idioma, (375, 427)) 
         if config.idioma != "Português":
-            screen.blit(idioma_indispoivel, (750, 445)) 
+            foreground.blit(idioma_indispoivel, (750, 445)) 
 
         # Check box
         if config.musica_on:
-            screen.blit(check_box, (365, 243))
-            pygame.mixer.music.unpause()
+            foreground.blit(check_box, (365, 243))
+            if musica_pausou:
+                pygame.mixer.music.unpause()
+                musica_pausou = False
         else:
             pygame.mixer.music.pause()
+            musica_pausou = True
+
         if config.som_on:
-            screen.blit(check_box, (365, 339))
+            foreground.blit(check_box, (365, 339))
+
+        # Sliders de som & música 
+        draw_slider()
+        botao_voltar.draw(foreground)
+
+        # Desenha grounds
+        screen.blit(background, (0, 0))
+        screen.blit(foreground, (0, 0))
             
         ## EVENTOS
         for event in pygame.event.get():
@@ -199,7 +211,7 @@ def abrir_opcoes(screen, clock):
                     config.idioma = "Español"   
 
                 # Botão de sair
-                elif botao_voltar.collidepoint(event.pos):
+                elif botao_voltar.rect.collidepoint(mouse_x, mouse_y): # Botão voltar
                     opcoes_aberto = False
                     from Particoes.menu import abrir_menu
                     abrir_menu(screen, clock)

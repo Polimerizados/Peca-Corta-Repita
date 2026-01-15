@@ -5,6 +5,7 @@ from Particoes.loja import abrir_loja
 from Particoes.opcoes import abrir_opcoes
 import config
 
+
 def abrir_classificacao(screen, clock):
     window_width, window_height = screen.get_size()
 
@@ -66,7 +67,8 @@ def abrir_classificacao(screen, clock):
             ticking = 0
 
         # Limpa as camadas
-        foreground.fill((0, 0, 0, 0))  
+        background.fill((255, 255, 255, 255))  
+        foreground.fill((255, 255, 255, 255))  
 
         # Desenha as bolinhas
         for i in range(100):
@@ -76,13 +78,13 @@ def abrir_classificacao(screen, clock):
             foreground.blit(bolinhas_bg[i].img, bolinhas_bg[i].pos)
 
         # Desenha grounds, leaderboardo, botão e textos
+        botao_voltar.draw(foreground)
+        desenhar_textos(leaderboard, textos_f, 63, 280)
+        desenhar_textos(leaderboard, textos_m, 476, 280)
+        desenhar_textos(leaderboard, textos_d, 889, 280)
         screen.blit(background, (0, 0))
         screen.blit(foreground, (0, 0))
         screen.blit(leaderboard,(0, 0))
-        botao_voltar.draw(screen)
-        desenhar_textos(screen, textos_f, 63, 280)
-        desenhar_textos(screen, textos_m, 476, 280)
-        desenhar_textos(screen, textos_d, 889, 280)
 
         ## EVENTOS
         for event in pygame.event.get():
@@ -97,8 +99,6 @@ def abrir_classificacao(screen, clock):
                     classificacao_aberta = False
                     from Particoes.menu import abrir_menu
                     abrir_menu(screen, clock)
-
-                    
 
         pygame.display.update()
         clock.tick(60)

@@ -3,7 +3,7 @@ from pygame.locals import *
 from Particoes.classes import bolinhas, Botao
 from Particoes.dificuldades import abrir_dificuldades
 from Particoes.opcoes import abrir_opcoes
-from musica import tocar_musica
+from Particoes.musica import tocar_musica, som_hover
 
 def abrir_menu(screen, clock):
     window_width, window_height = screen.get_size()
@@ -26,8 +26,9 @@ def abrir_menu(screen, clock):
     botao_opcoes = Botao(tamanho_botoes, tamanho_hover, (440, 493), (400, 478), "botao_opcoes")
     botao_leaderboard = Botao(tamanho_botoes, tamanho_hover, (440, 630), (400, 614), "botao_leaderboard") 
 
-    # Múscia
-    tocar_musica("musicas/macacos_me_mordam.wav")
+    # Música
+    if not pygame.mixer.music.get_busy():
+        tocar_musica("musicas/macacos_me_mordam.wav")
 
     ########### WHILE ############
     ticking = 60
@@ -75,7 +76,8 @@ def abrir_menu(screen, clock):
                     menu_aberto = False
                     from Particoes.leaderboard import abrir_classificacao
                     abrir_classificacao(screen, clock)
-                    
 
         pygame.display.update()
         clock.tick(60)
+
+    screen.fill((255, 255, 255, 255))

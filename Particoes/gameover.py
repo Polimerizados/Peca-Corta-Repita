@@ -1,8 +1,9 @@
 import pygame, sys
 from pygame.locals import *
 from Particoes.classes import CaixaTexto
+from Particoes.musica import tocar_musica
 import config
-from musica import tocar_musica
+
 
 # Tenta importar o módulo de rede (opcional)
 try:

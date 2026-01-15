@@ -2,6 +2,8 @@ import pygame, sys
 from pygame.locals import *
 from Particoes.classes import bolinhas, Botao
 from Particoes.fases import rodar_fase
+from Particoes.musica import tocar_musica
+
 
 def abrir_dificuldades(screen, clock):
     window_width, window_height = screen.get_size()
@@ -20,6 +22,9 @@ def abrir_dificuldades(screen, clock):
     dificil = Botao((360, 371), (400, 412), (856, 235), (836, 215), "botao_dificil")
     voltar = Botao((210, 75), (250, 89), (50, 680), (30,673), "botao_voltar")
 
+    # Música
+    if not pygame.mixer.music.get_busy():
+        tocar_musica("musicas/macacos_me_mordam.wav")
 
     ########### WHILE ############
     ticking = 60

@@ -2,6 +2,7 @@ import socket, threading, json, time, os
 import config
 import pygame
 
+
 pygame.init()
 window_width = int(pygame.display.Info().current_w)
 window_height = int(pygame.display.Info().current_h)
@@ -34,6 +35,16 @@ def _atomic_write(path, data_str):
         if os.path.exists(tmpname):
             os.remove(tmpname)
         raise
+
+def salvar_pontuacao(pontos):
+    with open("pontuacao.txt", "w") as f:
+        f.write(str(pontos))
+
+def carregar_pontuacao():
+    if os.path.exists("pontuacao.txt"):
+        with open("pontuacao.txt", "r") as f:
+            return int(f.read())
+    return 0
 
 def save_leaderboard():
     with _leaderboard_lock:
