@@ -24,7 +24,7 @@ def abrir_opcoes(screen, clock):
     menu_opcoes = pygame.image.load(f"Imagens/menu_opcoes.png")
 
     # Botão de voltar
-    botao_voltar = Botao((210, 75), (287, 103), (50, 680), (30, 672), "botao_voltar")
+    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
 
     ## SLIDER MÚSICA
     musica_pausou = False
@@ -183,7 +183,7 @@ def abrir_opcoes(screen, clock):
 
         # Sliders de som & música 
         draw_slider()
-        botao_voltar.draw(foreground)
+        botao_voltar.desenhar(foreground)
 
         # Desenha grounds
         screen.blit(background, (0, 0))

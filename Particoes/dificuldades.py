@@ -17,10 +17,10 @@ def abrir_dificuldades(screen, clock):
     titulo = pygame.image.load(f"Imagens/titulo_dificuldade.png")
 
     # Botões
-    facil = Botao((360, 371), (400, 412), (65, 235), (45, 215), "botao_facil")
-    medio = Botao((360, 371), (400, 412), (462, 235), (442, 215), "botao_medio")
-    dificil = Botao((360, 371), (400, 412), (856, 235), (836, 215), "botao_dificil")
-    voltar = Botao((210, 75), (250, 89), (50, 680), (30,673), "botao_voltar")
+    facil = Botao((360, 371), (65, 235), "botao_facil", fator_hover=1.111)
+    medio = Botao((360, 371), (462, 235), "botao_medio", fator_hover=1.111)
+    dificil = Botao((360, 371), (856, 235), "botao_dificil", fator_hover=1.111)
+    voltar = Botao((210, 75), (50, 680), cor=(244, 244, 244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
 
     # Música
     if not pygame.mixer.music.get_busy():
@@ -50,10 +50,10 @@ def abrir_dificuldades(screen, clock):
         # Desenha os grounds, botões e título
         screen.blit(background, (0, 0))
         screen.blit(foreground, (0, 0))
-        facil.draw(screen)
-        medio.draw(screen)
-        dificil.draw(screen)
-        voltar.draw(screen)
+        facil.desenhar(screen)
+        medio.desenhar(screen)
+        dificil.desenhar(screen)
+        voltar.desenhar(screen)
         screen.blit(titulo,(140, 50))
 
         ## EVENTOS

@@ -2,6 +2,7 @@ import pygame, sys, random, os, math
 from pygame.locals import *
 from config import window_width, window_height
 from Particoes.musica import tocar_som, som_hover
+from typing import Callable
 
 
 class dNTP:
@@ -254,45 +255,183 @@ class PolimeraseSelect:
         
 
 class Botao:
-    def __init__(self, tamanho, tamanho_hover, pos, pos_hover, imagem):
-        
-        # Define imagens e rects (normal e hover)
-        img = pygame.image.load(f"Imagens/{imagem}.png")
-        img_hover = pygame.image.load(f"Imagens/{imagem}_hover.png")
+    """Cria um botão com efeito de hover, forma e texto customizáveis."""
 
-        rect = pygame.Rect(pos, tamanho)
-        rect_hover =  pygame.Rect(pos_hover, tamanho_hover)
-        self.rect = rect # Rect inicial
+    def __init__(
+        self,
+        tamanho: tuple[int, int],
+        pos: tuple[int, int],
+        img: str | None = None,
+        cor: tuple[int, int, int] = (255, 255, 255),
+        fator_hover: float = 1.0,
+        cor_hover: tuple[int, int, int] | None = None,
+        cor_clique: tuple[int, int, int] | None = None,
+        raio_borda: int = 0,
+        fn_desenho: Callable[[pygame.Surface, pygame.Rect, tuple], None] | None = None,
+        texto: str | None = None,
+        nome_fonte: str | None = None,
+        tamanho_fonte: int = 16,
+        cor_texto: tuple[int, int, int] = (0, 0, 0),
+        cor_texto_hover: tuple[int, int, int] | None = None,
+        cor_texto_clique: tuple[int, int, int] | None = None,
+        ancora_texto: tuple[float, float] = (0.5, 0.5),
+        borda: float = 0,
+        cor_borda: tuple[int, int, int] | None = None,
+        cor_borda_hover: tuple[int, int, int] | None = None,
+        cor_borda_clique: tuple[int, int, int] | None = None,
+    ):
+        self.cor = cor
+        self.cor_hover = cor_hover or cor
+        self.cor_clique = cor_clique or self.cor_hover
+        self.raio_borda = raio_borda
+        self.raio_borda_hover = round(raio_borda * fator_hover)
+        self.fn_desenho = fn_desenho
 
-        # Armazena parâmetros
-        self.imgs = (img, img_hover)
-        self.rects = (rect, rect_hover)
-        self.tamanhos = (tamanho, tamanho_hover)
-        self.posicoes = (pos, pos_hover)
-        self.hoverou = False
-            
-    def draw(self, surface):
-        mouse_pos = pygame.mouse.get_pos()
+        self.borda = borda
+        self.borda_hover = round(borda * fator_hover)
+        self.cor_borda = cor_borda or cor_texto
+        self.cor_borda_hover = cor_borda_hover or self.cor_borda
+        self.cor_borda_clique = cor_borda_clique or self.cor_borda_hover
 
-        hovering_now = self.rect.collidepoint(mouse_pos)
+        self.texto = texto
+        self.cor_texto = cor_texto
+        self.cor_texto_hover = cor_texto_hover or cor_texto
+        self.cor_texto_clique = cor_texto_clique or self.cor_texto_hover
+        self.ancora_texto = ancora_texto
+        self.estava_hover = False
 
-        if hovering_now and not self.hoverou:
-            tocar_som(som_hover)
+        self.rect = pygame.Rect(pos, tamanho)
+        self.rect_ativo = self.rect
 
-        self.hoverou = hovering_now
+        lh = tamanho[0] * fator_hover
+        ah = tamanho[1] * fator_hover
+        px = pos[0] - (lh - tamanho[0]) / 2
+        py = pos[1] - (ah - tamanho[1]) / 2
+        self.rect_hover = pygame.Rect(px, py, lh, ah)
 
-        # Checa se o mouse está sobre o botão e define os parâmetros utilizados (normal ou hover)
-        if hovering_now: 
-            self.img = self.imgs[1] 
-            self.pos = self.posicoes[1] 
-            self.rect = self.rects[1]  
+        bruto = self._carregar_imagem(img)
+        self._imagem = pygame.transform.scale(bruto, tamanho) if bruto else None
+        self._imagem_hover = pygame.transform.scale(self._carregar_imagem_hover(img), (int(lh), int(ah))) if bruto else None
+
+        if texto is not None:
+            self._fonte = pygame.font.Font(nome_fonte, tamanho_fonte)
+            self._fonte_hover = pygame.font.Font(nome_fonte, int(tamanho_fonte * fator_hover))
         else:
-            self.img = self.imgs[0] 
-            self.pos = self.posicoes[0] 
-            self.rect = self.rects[0]
+            self._fonte = None
+            self._fonte_hover = None
 
-        # Desenha botão
-        surface.blit(self.img, self.pos)
+        self._clicado = False
+
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _carregar_imagem(nome: str | None) -> pygame.Surface | None:
+        if nome is None:
+            return None
+        try:
+            return pygame.image.load(f"Imagens/{nome}.png")
+        except Exception:
+            return None
+    
+    @staticmethod 
+    def _carregar_imagem_hover(nome: str | None) -> pygame.Surface | None:
+        if nome is None:
+            return None
+        try:
+            try:
+                return pygame.image.load(f"Imagens/{nome}_hover.png")
+            except Exception:
+                return pygame.image.load(f"Imagens/{nome}.png")
+        except Exception:
+            return None
+
+    @property
+    def com_hover(self) -> bool:
+        return self.rect_ativo.collidepoint(pygame.mouse.get_pos())
+
+    # ------------------------------------------------------------------
+
+    def processar_evento(self, evento: pygame.event.Event) -> bool:
+        """Processa eventos do botão. Retorna True no momento do clique."""
+        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+            if self.rect_ativo.collidepoint(evento.pos):
+                self._clicado = True
+
+        if evento.type == pygame.MOUSEBUTTONUP and evento.button == 1:
+            if self._clicado and self.rect_ativo.collidepoint(evento.pos):
+                self._clicado = False
+                return True
+            self._clicado = False
+
+        return False
+
+    # ------------------------------------------------------------------
+
+    def _desenhar_texto(self, superficie: pygame.Surface, rect: pygame.Rect, hover: bool) -> None:
+        if not self.texto or not self._fonte:
+            return
+
+        if self._clicado:
+            fonte = self._fonte_hover
+            cor = self.cor_texto_clique
+        elif hover:
+            fonte = self._fonte_hover
+            cor = self.cor_texto_hover
+        else:
+            fonte = self._fonte
+            cor = self.cor_texto
+
+        surf_texto = fonte.render(self.texto, True, cor)
+        lt, at = surf_texto.get_size()
+
+        ax, ay = self.ancora_texto
+        x = rect.x + ax * (rect.width - lt)
+        y = rect.y + ay * (rect.height - at)
+
+        superficie.blit(surf_texto, (x, y))
+
+    def desenhar(self, superficie: pygame.Surface) -> None:
+        hover = self.com_hover
+
+        if hover and not self.estava_hover:
+            tocar_som(som_hover)
+        self.estava_hover = hover
+
+        if self._clicado:
+            self.rect_ativo = self.rect_hover
+            cor = self.cor_clique
+            imagem = self._imagem_hover
+            cor_borda = self.cor_borda_clique
+            borda = self.borda_hover
+            raio_borda = self.raio_borda_hover
+        elif hover:
+            self.rect_ativo = self.rect_hover
+            cor = self.cor_hover
+            imagem = self._imagem_hover
+            cor_borda = self.cor_borda_hover
+            borda = self.borda_hover
+            raio_borda = self.raio_borda_hover
+        else:
+            self.rect_ativo = self.rect
+            cor = self.cor
+            imagem = self._imagem
+            cor_borda = self.cor_borda
+            borda = self.borda
+            raio_borda = self.raio_borda
+
+        if imagem:
+            superficie.blit(imagem, self.rect_ativo)
+        elif self.fn_desenho:
+            self.fn_desenho(superficie, self.rect_ativo, cor)
+        else:
+            pygame.draw.rect(superficie, cor, self.rect_ativo, border_radius=raio_borda)
+            if self.borda:
+                pygame.draw.rect(superficie, cor_borda, self.rect_ativo, borda, border_radius=raio_borda)
+
+        self._desenhar_texto(superficie, self.rect_ativo, hover)
+
+    def colide(self, pos: tuple[int, int]) -> bool:
+        return self.rect_ativo.collidepoint(pos)
 
 # Caixas de texto (para o menu)    
 class CaixaTexto:

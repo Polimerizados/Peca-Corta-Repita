@@ -12,8 +12,8 @@ def tocar_musica(musica):
 
 som_hover = mixer.Sound("musicas/som.mp3") # Carrega o efeito sonoro
 
-def tocar_som(somzeira):
+def tocar_som(som):
     if config.som_on:
-        somzeira.set_volume((config.volume_s)/100) # Configura o efeito sonoro
+        som.set_volume((config.volume_s)/100) # Configura o efeito sonoro
 
-        somzeira.play() # Toca a música # Configura o efeito sonoro
+        som.play() # Toca a música # Configura o efeito sonoro

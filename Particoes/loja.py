@@ -23,8 +23,8 @@ def abrir_loja(screen, clock):
     dinheiro_insuficiente_text = fonte.render(f"Dinheiro Insuficiente", True, VERMELHO)
 
     # Botões
-    botao_voltar = Botao((210, 75), (250, 89), (50, 680), (30,673), "botao_voltar")
-    botao_seguinte = Botao((210, 75), (250, 89), (1010, 680), (990,673), "botao_seguinte")
+    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
+    botao_seguinte = Botao((210, 75), (1010, 680), cor=(244,244,244), fator_hover=1.185, texto="Seguinte", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
     setas = {
         "esq_poli": pygame.Rect(300, 267.5, 50, 50),
         "dir_poli": pygame.Rect(930, 267.5, 50, 50),
@@ -95,8 +95,8 @@ def abrir_loja(screen, clock):
         screen.blit(moeda, (1210, 20))  
         screen.blit(moeda_text, (1200-moeda_text.get_width(), 25))
 
-        botao_voltar.draw(screen)
-        botao_seguinte.draw(screen)
+        botao_voltar.desenhar(screen)
+        botao_seguinte.desenhar(screen)
 
         # Mensagem de erro
         if erro:

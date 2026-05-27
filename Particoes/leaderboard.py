@@ -20,7 +20,7 @@ def abrir_classificacao(screen, clock):
     leaderboard = pygame.image.load(f"Imagens/leaderboard.png")
 
     # Botão
-    botao_voltar = Botao((210, 75), (250, 89), (50, 680), (30,673), "botao_voltar")
+    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
 
     # Tratamento dos dados
     def tratar_dados(lista_dados):
@@ -78,13 +78,13 @@ def abrir_classificacao(screen, clock):
             foreground.blit(bolinhas_bg[i].img, bolinhas_bg[i].pos)
 
         # Desenha grounds, leaderboardo, botão e textos
-        botao_voltar.draw(foreground)
-        desenhar_textos(leaderboard, textos_f, 63, 280)
-        desenhar_textos(leaderboard, textos_m, 476, 280)
-        desenhar_textos(leaderboard, textos_d, 889, 280)
+        botao_voltar.desenhar(foreground)
         screen.blit(background, (0, 0))
         screen.blit(foreground, (0, 0))
-        screen.blit(leaderboard,(0, 0))
+        screen.blit(leaderboard, (0, 0))
+        desenhar_textos(screen, textos_f, 63, 280)
+        desenhar_textos(screen, textos_m, 476, 280)
+        desenhar_textos(screen, textos_d, 889, 280)
 
         ## EVENTOS
         for event in pygame.event.get():

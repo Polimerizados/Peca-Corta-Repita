@@ -17,14 +17,18 @@ def abrir_menu(screen, clock):
 
     # Título
     titulo = pygame.image.load(f"Imagens/titulo.png")
+    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 95)
+    texto_titulo = fonte.render("Pesque, Conecte e Repita", True, (0, 0, 0))
+    texto_pos = ((window_width-texto_titulo.get_width())/2, 200-texto_titulo.get_height())
 
     ## BOTÕES
     tamanho_botoes = (400, 110)
     tamanho_hover = (477, 143)
 
-    botao_jogar = Botao(tamanho_botoes, tamanho_hover, (440, 356), (400, 341), "botao_jogar")
-    botao_opcoes = Botao(tamanho_botoes, tamanho_hover, (440, 493), (400, 478), "botao_opcoes")
-    botao_leaderboard = Botao(tamanho_botoes, tamanho_hover, (440, 630), (400, 614), "botao_leaderboard") 
+    CINZA = (244, 244, 244)
+    botao_jogar = Botao(tamanho_botoes, (440, 356), cor=CINZA, fator_hover=1.185, texto="Jogar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, borda=6)
+    botao_opcoes = Botao(tamanho_botoes, (440, 493), cor=CINZA, fator_hover=1.185, texto="Opções", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, borda=6)
+    botao_leaderboard = Botao(tamanho_botoes, (440, 630), cor=CINZA, fator_hover=1.185, texto="Leaderboard", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, borda=6)
 
     # Música
     if not pygame.mixer.music.get_busy():
@@ -54,10 +58,11 @@ def abrir_menu(screen, clock):
         # Desenha grounds, título e botões
         screen.blit(background, (0, 0))
         screen.blit(foreground, (0, 0))
-        botao_jogar.draw(screen)
-        botao_opcoes.draw(screen)
-        botao_leaderboard.draw(screen)
+        botao_jogar.desenhar(screen)
+        botao_opcoes.desenhar(screen)
+        botao_leaderboard.desenhar(screen)
         screen.blit(titulo,(0, 0))
+        screen.blit(texto_titulo, texto_pos)
 
         ## EVENTOS
         for event in pygame.event.get():
