@@ -16,8 +16,24 @@ def rodar_fase(dificuldade, screen, clock):
     cleaner = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
     cleaner.fill(pygame.Color(255, 255, 255, 255))
 
+    def escolher_base(dNTPs_livres):
+        """Escolhe uma base com probabilidade inversamente proporcional à raiz quadrada do número de bases atuais"""
+        # Contagem das bases
+        contagem = {"A": 0, "T": 0, "C": 0, "G": 0}
+        for d in dNTPs_livres:
+            if d.base in contagem:
+                contagem[d.base] += 1
+        
+        # Ajuste dos pesos
+        bases = ["A", "T", "C", "G"]
+        pesos = [1 / math.sqrt(contagem[b] + 1) for b in bases]  # +1 evita divisão por zero
+        base_escolhida = random.choices(bases, weights=pesos, k=1)[0]
+        return base_escolhida
+
     # Spawn temporário de 12 bases:
-    dNTPs_livres = [dNTP(dificuldade, "down") for _ in range(24)]
+    dNTPs_livres = []
+    for _ in range(24):
+        dNTPs_livres.append(dNTP(dificuldade, "down", escolher_base(dNTPs_livres)))
     diff_x = 0
     diff_y = 0
 
@@ -67,19 +83,6 @@ def rodar_fase(dificuldade, screen, clock):
     musica_selecionada = random.choice(musicas)
     tocar_musica(f"musicas/{musica_selecionada}")
 
-    def escolher_base(dNTPs_livres):
-        """Escolhe uma base com probabilidade inversamente proporcional à raiz quadrada do número de bases atuais"""
-        # Contagem das bases
-        contagem = {"A": 0, "T": 0, "C": 0, "G": 0}
-        for d in dNTPs_livres:
-            if d.base in contagem:
-                contagem[d.base] += 1
-        
-        # Ajuste dos pesos
-        bases = ["A", "T", "C", "G"]
-        pesos = [1 / math.sqrt(contagem[b] + 1) for b in bases]  # +1 evita divisão por zero
-        base_escolhida = random.choices(bases, weights=pesos, k=1)[0]
-        return base_escolhida
 
     ########### WHILE ############
     clicado_index = ""
