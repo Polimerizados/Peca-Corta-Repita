@@ -79,7 +79,6 @@ def rodar_fase(dificuldade, screen, clock):
         bases = ["A", "T", "C", "G"]
         pesos = [1 / math.sqrt(contagem[b] + 1) for b in bases]  # +1 evita divisão por zero
         base_escolhida = random.choices(bases, weights=pesos, k=1)[0]
-        print(contagem, base_escolhida)
         return base_escolhida
 
     ########### WHILE ############
