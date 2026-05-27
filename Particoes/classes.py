@@ -61,7 +61,6 @@ class dNTP:
             self.pos = (self.pos[0] + 2*scrolling, self.pos[1] + self.vel[1])
 
 
-
 class ligH:
     def __init__(self, base, base_par):
         self.base = base
@@ -74,14 +73,14 @@ class ligH:
             self.img = pygame.image.load(f"Imagens/ligH_CG.png")
         elif self.base == "G" and self.base_par == "C":
             self.img = pygame.image.load(f"Imagens/ligH_GC.png")
-        
+
+
 class dP:
     def __init__(self, level, tipo="purica", up_down="up"):
         self.level = level
         self.tipo = tipo
         if level == "m" or level == "d":
             self.img = pygame.image.load(f"Imagens/f{level}_dP_{tipo}_{up_down}.png")
-
 
 
 class bolinhas:
@@ -108,7 +107,6 @@ class bolinhas:
 
     def deslocar(self, scrolling):
         self.pos = (self.pos[0] + self.vel[0] + scrolling / 2, self.pos[1] + self.vel[1])
-        
 
 
 class polimerase:
@@ -150,7 +148,6 @@ class polimerase:
             s_pos = (self.decimo_de_ciclo ** 3 * scroll_ticks / 10) ** (1/3)
 
         self.pos = [self.pos_original[0], self.pos_original[1] + int(s_pos)]
-
 
 
 class PolimeraseSelect:
@@ -252,7 +249,7 @@ class PolimeraseSelect:
             return True
         else:
             return False
-        
+
 
 class Botao:
     """Cria um botão com efeito de hover, forma e texto customizáveis."""
@@ -480,3 +477,148 @@ class CaixaTexto:
     def salvar(self, pontuacao, dificuldade):
         self.ativo = False
         return {"nome": self.texto, "pontuação": pontuacao, "dificuldade":dificuldade}
+    
+
+class Slider:
+    """Slider interativo com handle circular e preenchimento proporcional."""
+
+    def __init__(
+        self,
+        pos: tuple[int, int],
+        width: int,
+        height: int = 20,
+        handle_radius: int = 20,
+        min_val: float = 0,
+        max_val: float = 100,
+        initial_val: float | None = None,
+        color: tuple[int, int, int] = (150, 150, 150),
+        fill_color: tuple[int, int, int] = (0, 0, 0),
+        handle_color: tuple[int, int, int] | None = None,
+        border_radius: int = 1000,
+        show_value: bool = False,
+        font_name: str | None = None,
+        font_size: int = 16,
+        value_color: tuple[int, int, int] | None = None,
+        value_anchor: str = "right",   # "left", "right", "top", "bottom"
+        value_offset: int = 20,
+    ):
+        self.pos = pos
+        self.width = width
+        self.height = height
+        self.handle_radius = handle_radius
+        self.min_val = min_val
+        self.max_val = max_val
+        self.color = color
+        self.fill_color = fill_color
+        self.handle_color = handle_color or fill_color
+        self.border_radius = border_radius
+        self.show_value = show_value
+        self.value_color = value_color or fill_color
+        self.value_anchor = value_anchor
+        self.value_offset = value_offset
+
+        self._font = pygame.font.Font(font_name, font_size) if show_value else None
+
+        self.value = initial_val if initial_val is not None else min_val
+        self.rect = pygame.Rect(pos, (width, height))
+        self._dragging = False
+
+    # ------------------------------------------------------------------
+    # PROPRIEDADES
+    # ------------------------------------------------------------------
+
+    @property
+    def value(self) -> float:
+        return self._value
+
+    @value.setter
+    def value(self, v: float) -> None:
+        self._value = max(self.min_val, min(self.max_val, v))
+
+    @property
+    def _handle_x(self) -> float:
+        t = (self._value - self.min_val) / (self.max_val - self.min_val)
+        return self.pos[0] + t * self.width
+
+    @property
+    def _handle_center(self) -> tuple[float, float]:
+        return (self._handle_x, self.pos[1] + self.height // 2)
+
+    @property
+    def _fill_rect(self) -> pygame.Rect:
+        return pygame.Rect(self.pos, (self._handle_x - self.pos[0], self.height))
+
+    # ------------------------------------------------------------------
+    # EVENTOS
+    # ------------------------------------------------------------------
+
+    def manipular_evento(self, event: pygame.event.Event) -> bool:
+        """Processa eventos. Retorna True quando o valor muda."""
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            hx, hy = self._handle_center
+            dx = event.pos[0] - hx
+            dy = event.pos[1] - hy
+            if dx * dx + dy * dy <= self.handle_radius ** 2:
+                self._dragging = True
+            elif self.rect.collidepoint(event.pos):
+                self._update_value(event.pos[0])
+                self._dragging = True  # já começa arrastando a partir do clique
+                return True
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            self._dragging = False
+
+        if event.type == pygame.MOUSEMOTION and self._dragging:
+            self._update_value(event.pos[0])
+            return True
+
+        return False
+
+    def _update_value(self, mouse_x: int) -> None:
+        t = (mouse_x - self.pos[0]) / self.width
+        t = max(0.0, min(1.0, t))
+        self._value = self.min_val + t * (self.max_val - self.min_val)
+
+    # ------------------------------------------------------------------
+    # DRAW
+    # ------------------------------------------------------------------
+
+    def _draw_value(self, surface: pygame.Surface) -> None:
+        if not self.show_value or not self._font:
+            return
+
+        val_surf = self._font.render(str(int(self._value)), True, self.value_color)
+        vw, vh = val_surf.get_size()
+        cx = self.pos[0] + self.width // 2
+        cy = self.pos[1] + self.height // 2
+
+        if self.value_anchor == "right":
+            x = self.pos[0] + self.width + self.value_offset
+            y = cy - vh // 2
+        elif self.value_anchor == "left":
+            x = self.pos[0] - vw - self.value_offset
+            y = cy - vh // 2
+        elif self.value_anchor == "top":
+            x = cx - vw // 2
+            y = self.pos[1] - vh - self.value_offset
+        elif self.value_anchor == "bottom":
+            x = cx - vw // 2
+            y = self.pos[1] + self.height + self.value_offset
+        else:
+            return
+
+        surface.blit(val_surf, (x, y))
+
+    def desenhar(self, surface: pygame.Surface) -> None:
+        # trilha de fundo
+        pygame.draw.rect(surface, self.color, self.rect, border_radius=self.border_radius)
+
+        # preenchimento até o handle
+        if self._fill_rect.width > 0:
+            pygame.draw.rect(surface, self.fill_color, self._fill_rect, border_radius=self.border_radius)
+
+        # handle circular
+        pygame.draw.circle(surface, self.handle_color, (int(self._handle_center[0]), int(self._handle_center[1])), self.handle_radius)
+
+        # valor numérico
+        self._draw_value(surface)

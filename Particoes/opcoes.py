@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-from Particoes.classes import bolinhas, Botao
+from Particoes.classes import bolinhas, Botao, Slider
 import config
 
 
@@ -26,42 +26,11 @@ def abrir_opcoes(screen, clock):
     # Botão de voltar
     botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
 
-    ## SLIDER MÚSICA
-    musica_pausou = False
-    # Configurações do slider
-    slider_x_m = 453
-    slider_y_m = 268
-    slider_width_m = 534
-    slider_height_m = 20
-    slider_rect_m = pygame.Rect((slider_x_m, slider_y_m), (slider_width_m, slider_height_m))
+    # Slider da musica
+    slider_musica = Slider((460, 268), 520, 20, value_offset=30, initial_val=config.volume_m, color=GRAY, fill_color=BLACK, show_value=True, font_name="Fontes/gliker-regular.ttf", font_size=55)
 
-    # Controle deslizante CIRCULAR
-    handle_radius_m = 20
-    handle_center_m = [((config.volume_m/100)*slider_width_m) + slider_x_m , slider_y_m + slider_height_m//2]
-
-    # Sombreamento do slider
-    hover_slider_rect_m = pygame.Rect((slider_x_m, slider_y_m), (handle_center_m[0]-slider_x_m, slider_height_m))
-
-    # Valor do slider
-    dragging_m = False
-
-    ## SLIDER SOM
-    # Configurações do slider
-    slider_x_s = 453
-    slider_y_s = 363
-    slider_width_s = 534
-    slider_height_s = 20
-    slider_rect_s = pygame.Rect((slider_x_s, slider_y_s), (slider_width_s, slider_height_s))
-
-    # Controle deslizante CIRCULAR
-    handle_radius_s = 20
-    handle_center_s = [((config.volume_s/100)*slider_width_s) + slider_x_s, slider_y_s + slider_height_s//2]
-
-    # Sombreamento do slider
-    hover_slider_rect_s = pygame.Rect((slider_x_s, slider_y_s), (handle_center_s[0]-slider_x_s, slider_height_s))
-
-    # Valor do slider
-    dragging_s = False
+    # Slider do som
+    slider_som = Slider((460, 363), 520, 20, value_offset=30, initial_val=config.volume_s, color=GRAY, fill_color=BLACK, show_value=True, font_name="Fontes/gliker-regular.ttf", font_size=55)
 
     ## CHECK BOX
     check_box = pygame.image.load(f"Imagens/check_opcoes.png")
@@ -69,6 +38,9 @@ def abrir_opcoes(screen, clock):
     # Rect botão de música e som
     rect_musica = pygame.Rect((365, 243), (66, 66))
     rect_som = pygame.Rect((365, 339), (66, 66))
+
+    # Pause da música
+    musica_pausou = False
 
     # Fonte
     try:
@@ -86,51 +58,6 @@ def abrir_opcoes(screen, clock):
     rect_espanhol = pygame.Rect((365, 634), (363, 65))
     idioma_indispoivel = mini_font.render(f"Idioma indisponível", True, RED)
     selecionando_idioma = False
-
-    
-    ## FUNÇÕES
-    def draw_rounded_rect(surface, color, rect, radius=5):
-        """Desenha retângulo com cantos arredondados"""
-        x, y, w, h = rect
-        pygame.draw.rect(surface, color, (x + radius, y, w - 2*radius, h))
-        pygame.draw.rect(surface, color, (x, y + radius, w, h - 2*radius))
-        pygame.draw.circle(surface, color, (x + radius, y + radius), radius)
-        pygame.draw.circle(surface, color, (x + w - radius, y + radius), radius)
-        pygame.draw.circle(surface, color, (x + radius, y + h - radius), radius)
-        pygame.draw.circle(surface, color, (x + w - radius, y + h - radius), radius)
-
-    def draw_slider():
-        """Desenha slider de música e de som"""
-        # Slider musica
-        draw_rounded_rect(foreground, GRAY, slider_rect_m, 7.5)
-
-        draw_rounded_rect(foreground, BLACK, hover_slider_rect_m, 7.5)
-
-        pygame.draw.circle(foreground, BLACK, handle_center_m, handle_radius_m)
-
-        value_text = font.render(f"{config.volume_m}", True, BLACK)
-        foreground.blit(value_text, (slider_x_m + slider_width_m + 20, slider_y_m-25))
-
-        # Slider som
-        draw_rounded_rect(foreground, GRAY, slider_rect_s, 7.5)
-
-        draw_rounded_rect(foreground, BLACK, hover_slider_rect_s, 7.5)
-
-        pygame.draw.circle(foreground, BLACK, handle_center_s, handle_radius_s)
-
-        value_text = font.render(f"{config.volume_s}", True, BLACK)
-        foreground.blit(value_text, (slider_x_s + slider_width_s + 20, slider_y_s-25))
-
-    def update_m_slider_value():
-        """Atualiza o valor da música"""
-        config.volume_m = int(((handle_center_m[0] - slider_x_m) / slider_width_m) * 100)
-        config.volume_m = max(0, min(100, config.volume_m))
-        pygame.mixer.music.set_volume((config.volume_m)/100)
-        
-    def update_s_slider_value():
-        """Atualiza o valor do som"""
-        config.volume_s = int(((handle_center_s[0] - slider_x_s) / slider_width_s) * 100)
-        config.volume_s = max(0, min(100, config.volume_s))
 
     ########### WHILE ############
 
@@ -182,7 +109,8 @@ def abrir_opcoes(screen, clock):
             foreground.blit(check_box, (365, 339))
 
         # Sliders de som & música 
-        draw_slider()
+        slider_musica.desenhar(foreground)
+        slider_som.desenhar(foreground)
         botao_voltar.desenhar(foreground)
 
         # Desenha grounds
@@ -191,6 +119,15 @@ def abrir_opcoes(screen, clock):
             
         ## EVENTOS
         for event in pygame.event.get():
+            if slider_musica.manipular_evento(event):
+                config.musica_on = True
+                config.volume_m = int(slider_musica.value)
+                pygame.mixer.music.set_volume(slider_musica.value / 100)
+
+            if slider_som.manipular_evento(event):
+                config.som_on = True
+                config.volume_s = int(slider_som.value)     
+
             if event.type == KEYDOWN and event.key == K_ESCAPE: # Apertou Esc
                 opcoes_aberto = False
                 from Particoes.menu import abrir_menu
@@ -199,8 +136,6 @@ def abrir_opcoes(screen, clock):
             if event.type == MOUSEBUTTONDOWN and event.button == 1:  # Clique com botão esquerdo        
                 # Colisão circular com os sliders
                 mouse_x, mouse_y = event.pos
-                distance_m = ((mouse_x - handle_center_m[0])**2 + (mouse_y - handle_center_m[1])**2)**0.5
-                distance_s = ((mouse_x - handle_center_s[0])**2 + (mouse_y - handle_center_s[1])**2)**0.5
 
                 # Seleção de idioma
                 if rect_portugues.collidepoint(event.pos) and selecionando_idioma:
@@ -223,43 +158,12 @@ def abrir_opcoes(screen, clock):
                 elif rect_som.collidepoint(event.pos):
                     config.som_on = False if config.som_on else True
 
-                # Slider de música
-                elif distance_m <= handle_radius_m:
-                    dragging_m = True
-
-                # Slider de som
-                elif distance_s <= handle_radius_s:
-                    dragging_s = True
-
                 # Botão de idioma
                 if rect_idioma.collidepoint(event.pos) and not selecionando_idioma:
                     selecionando_idioma = True
                 else:
                     selecionando_idioma = False
-                
-            elif event.type == MOUSEBUTTONUP and event.button == 1: # Soltou o botão esquerdo
-                dragging_m = False
-                dragging_s = False
 
-            elif event.type == MOUSEMOTION: # Movimentou o mouse
-                # Segurando o slider de música
-                if dragging_m:
-                    config.musica_on = True
-                    mouse_x = event.pos[0]
-                    new_x = max(slider_x_m, min(slider_x_m + slider_width_m, mouse_x))
-                    handle_center_m[0] = new_x
-                    hover_slider_rect_m = pygame.Rect((slider_x_m, slider_y_m), (handle_center_m[0]-slider_x_m, slider_height_m))
-                    update_m_slider_value()
 
-                # Segurando o slider de som
-                if dragging_s:
-                    config.som_on = True
-                    mouse_x = event.pos[0]
-                    new_x = max(slider_x_s, min(slider_x_s + slider_width_s, mouse_x))
-                    handle_center_s[0] = new_x
-                    hover_slider_rect_s = pygame.Rect((slider_x_s, slider_y_s), (handle_center_s[0]-slider_x_s, slider_height_s))
-                    update_s_slider_value()
-
-        draw_slider()
         pygame.display.update()
         clock.tick(60)

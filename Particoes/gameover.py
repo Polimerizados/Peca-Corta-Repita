@@ -140,7 +140,7 @@ def gameover(screen, clock, dificuldade, pontuacao):
 
                 # Botao de salvar
                 elif rect_salvar.collidepoint(event.pos):
-                    if len(caixa_texto.texto) == 3:
+                    if len(caixa_texto.texto) == 3 and not salvo:
                         # tenta obter o registro do CaixaTexto.salvar
                         novo_registro = caixa_texto.salvar(pontuacao, dificuldade)
 
@@ -198,7 +198,7 @@ def gameover(screen, clock, dificuldade, pontuacao):
                             erro_nome = True
                             erro = False
 
-                    else:
+                    elif not salvo:
                         erro = True
                         erro_nome = False
 
