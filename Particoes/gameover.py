@@ -3,6 +3,7 @@ from pygame.locals import *
 from Particoes.classes import CaixaTexto
 from Particoes.musica import tocar_musica
 import config
+from config import resource_path
 
 
 # Tenta importar o módulo de rede (opcional)
@@ -22,10 +23,10 @@ def gameover(screen, clock, dificuldade, pontuacao):
     background_p.fill(pygame.Color(120, 120, 120, 100))
     screen.blit(background_p, (0, 0))
 
-    fim_de_jogo = pygame.image.load(f"Imagens/fim_de_jogo.png")
-    fim_de_jogo_s = pygame.image.load(f"Imagens/fim_de_jogo_s.png")
-    fim_de_jogo_nhs = pygame.image.load(f"Imagens/fim_de_jogo_nhs.png")
-    fim_de_jogo_nhs_s = pygame.image.load(f"Imagens/fim_de_jogo_nhs_s.png")
+    fim_de_jogo = pygame.image.load(resource_path(f"Imagens/fim_de_jogo.png"))
+    fim_de_jogo_s = pygame.image.load(resource_path(f"Imagens/fim_de_jogo_s.png"))
+    fim_de_jogo_nhs = pygame.image.load(resource_path(f"Imagens/fim_de_jogo_nhs.png"))
+    fim_de_jogo_nhs_s = pygame.image.load(resource_path(f"Imagens/fim_de_jogo_nhs_s.png"))
 
     # Rect para a identificação dos botões
     rect_sair = pygame.Rect((813, 555), (159, 119))
@@ -36,9 +37,9 @@ def gameover(screen, clock, dificuldade, pontuacao):
     caixa_texto = CaixaTexto(440, 475)
 
     # Importar fonte
-    mini_fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 20)
-    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 40)
-    mega_fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 70)
+    mini_fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 20)
+    fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 40)
+    mega_fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 70)
 
     # Carregar pontuacao
     texto_pontuacao = mega_fonte.render(str(pontuacao), True, (0, 0, 0))
@@ -75,7 +76,7 @@ def gameover(screen, clock, dificuldade, pontuacao):
     erro_nome = False
 
     # Música
-    tocar_musica("musicas/macacos_me_mordam.wav")
+    tocar_musica(resource_path("musicas/macacos_me_mordam.wav"))
 
     ########### WHILE ############
     ticking = 60

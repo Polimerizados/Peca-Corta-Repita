@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 from Particoes.classes import Slider
 import config
+from config import resource_path
 
 
 def pausar(screen, clock):
@@ -17,7 +18,7 @@ def pausar(screen, clock):
     background_p.fill(pygame.Color(120, 120, 120, 100))
     screen.blit(background_p, (0, 0))
 
-    menu_pause = pygame.image.load(f"Imagens/pause_menu.png")
+    menu_pause = pygame.image.load(resource_path(f"Imagens/pause_menu.png"))
 
     # Rect para a identificação dos botões
     rect_sair = pygame.Rect((288, 555), (284, 119))
@@ -33,7 +34,7 @@ def pausar(screen, clock):
     dragging_s = False
 
     ## CHECK BOX
-    check_box = pygame.image.load(f"Imagens/check.png")
+    check_box = pygame.image.load(resource_path(f"Imagens/check.png"))
 
     # Rect botão de música e som
     rect_musica = pygame.Rect((463, 276), (45, 45))
@@ -44,14 +45,14 @@ def pausar(screen, clock):
 
     # Fonte
     try:
-        font = pygame.font.Font("Fontes/gliker-regular.ttf", 36)
-        mini_font = pygame.font.Font("Fontes/gliker-regular.ttf", 25)
+        font = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 36)
+        mini_font = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 25)
     except:
         font = pygame.font.SysFont("arial", 36, bold=True)
         mini_font = pygame.font.SysFont("arial", 25, bold=True)
 
     # Idioma
-    menu_idioma = pygame.image.load(f"Imagens/pause_menu_idioma.png")
+    menu_idioma = pygame.image.load(resource_path(f"Imagens/pause_menu_idioma.png"))
     rect_idioma = pygame.Rect((463, 403), (247, 52))
     rect_portugues = pygame.Rect((463, 454), (247, 45))
     rect_ingles = pygame.Rect((463, 498), (247, 45))

@@ -3,6 +3,7 @@ from pygame.locals import *
 from config import window_width, window_height
 from Particoes.musica import tocar_som, som_hover
 from typing import Callable
+from config import resource_path
 
 
 class dNTP:
@@ -31,7 +32,7 @@ class dNTP:
             self.base_par = "C"
             self.tipo = "purica"
     
-        self.img = pygame.image.load(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png") 
+        self.img = pygame.image.load(resource_path(f"Imagens/f{level}_d{self.base}TP_{self.up_down}.png")) 
 
         if pos == "random":
             self.pos = (random.randint(0, window_width-80), random.randint(0, window_height-100))
@@ -66,13 +67,13 @@ class ligH:
         self.base = base
         self.base_par = base_par
         if self.base == "A" and self.base_par == "T":
-            self.img = pygame.image.load(f"Imagens/ligH_AT.png")
+            self.img = pygame.image.load(resource_path(f"Imagens/ligH_AT.png"))
         elif self.base == "T" and self.base_par == "A":
-            self.img = pygame.image.load(f"Imagens/ligH_TA.png")
+            self.img = pygame.image.load(resource_path(f"Imagens/ligH_TA.png"))
         elif self.base == "C" and self.base_par == "G":
-            self.img = pygame.image.load(f"Imagens/ligH_CG.png")
+            self.img = pygame.image.load(resource_path(f"Imagens/ligH_CG.png"))
         elif self.base == "G" and self.base_par == "C":
-            self.img = pygame.image.load(f"Imagens/ligH_GC.png")
+            self.img = pygame.image.load(resource_path(f"Imagens/ligH_GC.png"))
 
 
 class dP:
@@ -80,7 +81,7 @@ class dP:
         self.level = level
         self.tipo = tipo
         if level == "m" or level == "d":
-            self.img = pygame.image.load(f"Imagens/f{level}_dP_{tipo}_{up_down}.png")
+            self.img = pygame.image.load(resource_path(f"Imagens/f{level}_dP_{tipo}_{up_down}.png"))
 
 
 class bolinhas:
@@ -91,7 +92,7 @@ class bolinhas:
             self.pos = pos
         self.tick = random.randint(0, 59)
         self.vel = (random.randint(-3, 3), random.randint(-3, 3))
-        self.img = pygame.transform.scale(pygame.image.load(f"Imagens/bolinha.png"), (10, 10)) 
+        self.img = pygame.transform.scale(pygame.image.load(resource_path(f"Imagens/bolinha.png")), (10, 10)) 
 
     def acelerar(self):
         if self.pos[0] < 0:
@@ -111,7 +112,7 @@ class bolinhas:
 
 class polimerase:
     def __init__(self, polimerase_selecionada, dificuldade, pos):
-        self.img = pygame.image.load(f"Imagens/{polimerase_selecionada}_polimerase.png")
+        self.img = pygame.image.load(resource_path(f"Imagens/{polimerase_selecionada}_polimerase.png"))
         self.pos_original = pos
         self.pos = [self.pos_original[0], self.pos_original[1]] # Lista, para poder manipular
 
@@ -160,11 +161,11 @@ class PolimeraseSelect:
         self.tag = dicionario["tag"]
         self.custo = dicionario["custo"]
         self.desbloqueado = dicionario["desbloqueado"]
-        self.img = pygame.image.load(f"Imagens/{img}.png")
+        self.img = pygame.image.load(resource_path(f"Imagens/{img}.png"))
         try:
-            self.img_bloqueado = pygame.image.load(f"Imagens/bloqueado_{self.custo}.png")
+            self.img_bloqueado = pygame.image.load(resource_path(f"Imagens/bloqueado_{self.custo}.png"))
         except:
-            self.img_bloqueado = pygame.image.load(f"Imagens/bloqueado_1000.png")
+            self.img_bloqueado = pygame.image.load(resource_path(f"Imagens/bloqueado_1000.png"))
         self.velocidade_angular = vel_ang
         
 
@@ -311,8 +312,8 @@ class Botao:
         self._imagem_hover = pygame.transform.scale(self._carregar_imagem_hover(img), (int(lh), int(ah))) if bruto else None
 
         if texto is not None:
-            self._fonte = pygame.font.Font(nome_fonte, tamanho_fonte)
-            self._fonte_hover = pygame.font.Font(nome_fonte, int(tamanho_fonte * fator_hover))
+            self._fonte = pygame.font.Font(resource_path(nome_fonte), tamanho_fonte)
+            self._fonte_hover = pygame.font.Font(resource_path(nome_fonte), int(tamanho_fonte * fator_hover))
         else:
             self._fonte = None
             self._fonte_hover = None
@@ -326,7 +327,7 @@ class Botao:
         if nome is None:
             return None
         try:
-            return pygame.image.load(f"Imagens/{nome}.png")
+            return pygame.image.load(resource_path(f"Imagens/{nome}.png"))
         except Exception:
             return None
     
@@ -336,9 +337,9 @@ class Botao:
             return None
         try:
             try:
-                return pygame.image.load(f"Imagens/{nome}_hover.png")
+                return pygame.image.load(resource_path(f"Imagens/{nome}_hover.png"))
             except Exception:
-                return pygame.image.load(f"Imagens/{nome}.png")
+                return pygame.image.load(resource_path(f"Imagens/{nome}.png"))
         except Exception:
             return None
 
@@ -517,7 +518,7 @@ class Slider:
         self.value_anchor = value_anchor
         self.value_offset = value_offset
 
-        self._font = pygame.font.Font(font_name, font_size) if show_value else None
+        self._font = pygame.font.Font(resource_path(font_name), font_size) if show_value else None
 
         self.value = initial_val if initial_val is not None else min_val
         self.rect = pygame.Rect(pos, (width, height))

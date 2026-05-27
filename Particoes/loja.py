@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 from Particoes.classes import bolinhas, PolimeraseSelect, Botao
 import config
+from config import resource_path
 import math
 
 
@@ -16,15 +17,15 @@ def abrir_loja(screen, clock):
 
     # Carregando recursos
     bolinhas_bg = [bolinhas() for _ in range(100)]
-    titulo = pygame.image.load(f"Imagens/titulo_loja.png")
-    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 32)
-    moeda = pygame.image.load(f"Imagens/moeda.png")
+    titulo = pygame.image.load(resource_path(f"Imagens/titulo_loja.png"))
+    fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 32)
+    moeda = pygame.image.load(resource_path(f"Imagens/moeda.png"))
     erro_text = fonte.render(f"Polimerase inválida", True, VERMELHO)
     dinheiro_insuficiente_text = fonte.render(f"Dinheiro Insuficiente", True, VERMELHO)
 
     # Botões
-    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
-    botao_seguinte = Botao((210, 75), (1010, 680), cor=(244,244,244), fator_hover=1.185, texto="Seguinte", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
+    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=33, borda=5)
+    botao_seguinte = Botao((210, 75), (1010, 680), cor=(244,244,244), fator_hover=1.185, texto="Seguinte", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=33, borda=5)
     setas = {
         "esq_poli": pygame.Rect(300, 267.5, 50, 50),
         "dir_poli": pygame.Rect(930, 267.5, 50, 50),

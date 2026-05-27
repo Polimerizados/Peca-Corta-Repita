@@ -4,6 +4,7 @@ from Particoes.classes import bolinhas, Botao
 from Particoes.loja import abrir_loja
 from Particoes.opcoes import abrir_opcoes
 import config
+from config import resource_path
 
 
 def abrir_classificacao(screen, clock):
@@ -17,10 +18,10 @@ def abrir_classificacao(screen, clock):
     foreground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
 
     # Imagem
-    leaderboard = pygame.image.load(f"Imagens/leaderboard.png")
+    leaderboard = pygame.image.load(resource_path(f"Imagens/leaderboard.png"))
 
     # Botão
-    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
+    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=33, borda=5)
 
     # Tratamento dos dados
     def tratar_dados(lista_dados):
@@ -33,7 +34,7 @@ def abrir_classificacao(screen, clock):
     config.lista_dados_d = tratar_dados(config.lista_dados_d)
 
     # Importar a fonte
-    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 50)
+    fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 50)
 
     # Transformar dados em texto
     def converter_dados(lista_dados):

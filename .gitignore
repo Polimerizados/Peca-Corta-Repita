@@ -4,4 +4,5 @@ __pycache__/
 *.pyd
 *.cpython-*.pyc
 *.cpython-*.pyo
+output/
 pontuacao.txt

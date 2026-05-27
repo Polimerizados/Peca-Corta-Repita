@@ -3,7 +3,8 @@ import math
 from pygame.locals import *
 from Particoes.classes import dNTP, ligH, dP, bolinhas, polimerase
 from Particoes.musica import tocar_musica
-from config import window_width, window_height, screen, clock, salvar_pontuacao, carregar_pontuacao, polimerase_selecionada
+from config import window_width, window_height, screen, clock, salvar_pontuacao, carregar_pontuacao, polimerase_selecionada, resource_path
+
 
 
 def rodar_fase(dificuldade, screen, clock):
@@ -63,25 +64,25 @@ def rodar_fase(dificuldade, screen, clock):
         dP_fita = [dP(dificuldade, nucleotideos_fita[i].tipo, "up") for i in range(14)]
 
     # Botão de Pause
-    botao_pause = pygame.image.load(f"Imagens/pause_botao.png")
+    botao_pause = pygame.image.load(resource_path(f"Imagens/pause_botao.png"))
     pause_rect = pygame.Rect((1197, 35), (40, 50))
 
     # Pontuação
     pygame.font.init()
     pontuacao_global = carregar_pontuacao()
     pontuacao_inicial = pontuacao_global
-    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 48)
-    moeda = pygame.image.load(f"Imagens/moeda.png")
+    fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 48)
+    moeda = pygame.image.load(resource_path(f"Imagens/moeda.png"))
 
     # -------- CRONÔMETRO 30s --------
     tempo_total = 30_000  # 30 segundos em ms
     inicio_tempo = pygame.time.get_ticks()
-    fonte_tempo = pygame.font.Font("Fontes/gliker-regular.ttf", 36)
+    fonte_tempo = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 36)
 
     # Música
     musicas = ["(EXTRA) PATIFARIA ESPACIAL.ogg","GELEIA MICROBIOTICA.ogg", "PELAS BARBAS DO PROFETA.ogg"]
     musica_selecionada = random.choice(musicas)
-    tocar_musica(f"musicas/{musica_selecionada}")
+    tocar_musica(resource_path(f"musicas/{musica_selecionada}"))
 
 
     ########### WHILE ############

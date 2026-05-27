@@ -4,6 +4,7 @@ from Particoes.classes import bolinhas, Botao
 from Particoes.dificuldades import abrir_dificuldades
 from Particoes.opcoes import abrir_opcoes
 from Particoes.musica import tocar_musica, som_hover
+from config import resource_path
 
 def abrir_menu(screen, clock):
     window_width, window_height = screen.get_size()
@@ -16,8 +17,8 @@ def abrir_menu(screen, clock):
     foreground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
 
     # Título
-    titulo = pygame.image.load(f"Imagens/titulo.png")
-    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 95)
+    titulo = pygame.image.load(resource_path(f"Imagens/titulo.png"))
+    fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 95)
     texto_titulo = fonte.render("Pesque, Conecte e Repita", True, (0, 0, 0))
     texto_pos = ((window_width-texto_titulo.get_width())/2, 200-texto_titulo.get_height())
 
@@ -26,13 +27,13 @@ def abrir_menu(screen, clock):
     tamanho_hover = (477, 143)
 
     CINZA = (244, 244, 244)
-    botao_jogar = Botao(tamanho_botoes, (440, 356), cor=CINZA, fator_hover=1.185, texto="Jogar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, borda=6)
-    botao_opcoes = Botao(tamanho_botoes, (440, 493), cor=CINZA, fator_hover=1.185, texto="Opções", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, borda=6)
-    botao_leaderboard = Botao(tamanho_botoes, (440, 630), cor=CINZA, fator_hover=1.185, texto="Leaderboard", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, borda=6)
+    botao_jogar = Botao(tamanho_botoes, (440, 356), cor=CINZA, fator_hover=1.185, texto="Jogar", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=58, borda=6)
+    botao_opcoes = Botao(tamanho_botoes, (440, 493), cor=CINZA, fator_hover=1.185, texto="Opções", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=58, borda=6)
+    botao_leaderboard = Botao(tamanho_botoes, (440, 630), cor=CINZA, fator_hover=1.185, texto="Leaderboard", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=58, borda=6)
 
     # Música
     if not pygame.mixer.music.get_busy():
-        tocar_musica("musicas/macacos_me_mordam.wav")
+        tocar_musica(resource_path("musicas/macacos_me_mordam.wav"))
 
     ########### WHILE ############
     ticking = 60

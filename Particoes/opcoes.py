@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 from Particoes.classes import bolinhas, Botao, Slider
 import config
+from config import resource_path
 
 
 def abrir_opcoes(screen, clock):
@@ -21,10 +22,10 @@ def abrir_opcoes(screen, clock):
     foreground = pygame.Surface((window_width, window_height), pygame.SRCALPHA)
     foreground.fill(pygame.Color(255, 255, 255, 0))
 
-    menu_opcoes = pygame.image.load(f"Imagens/menu_opcoes.png")
+    menu_opcoes = pygame.image.load(resource_path(f"Imagens/menu_opcoes.png"))
 
     # Botão de voltar
-    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
+    botao_voltar = Botao((210, 75), (50, 680), cor=(244,244,244), fator_hover=1.185, texto="Voltar", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=33, borda=5)
 
     # Slider da musica
     slider_musica = Slider((460, 268), 520, 20, value_offset=30, initial_val=config.volume_m, color=GRAY, fill_color=BLACK, show_value=True, font_name="Fontes/gliker-regular.ttf", font_size=55)
@@ -33,7 +34,7 @@ def abrir_opcoes(screen, clock):
     slider_som = Slider((460, 363), 520, 20, value_offset=30, initial_val=config.volume_s, color=GRAY, fill_color=BLACK, show_value=True, font_name="Fontes/gliker-regular.ttf", font_size=55)
 
     ## CHECK BOX
-    check_box = pygame.image.load(f"Imagens/check_opcoes.png")
+    check_box = pygame.image.load(resource_path(f"Imagens/check_opcoes.png"))
 
     # Rect botão de música e som
     rect_musica = pygame.Rect((365, 243), (66, 66))
@@ -44,14 +45,14 @@ def abrir_opcoes(screen, clock):
 
     # Fonte
     try:
-        font = pygame.font.Font("Fontes/gliker-regular.ttf", 55)
-        mini_font = pygame.font.Font("Fontes/gliker-regular.ttf", 35)
+        font = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 55)
+        mini_font = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 35)
     except:
         font = pygame.font.SysFont("arial", 55, bold=True)
         mini_font = pygame.font.SysFont("arial", 35, bold=True)
 
     # Idioma
-    menu_opcoes_idioma = pygame.image.load(f"Imagens/menu_opcoes_idioma.png")
+    menu_opcoes_idioma = pygame.image.load(resource_path(f"Imagens/menu_opcoes_idioma.png"))
     rect_idioma = pygame.Rect((365, 428), (363, 76))
     rect_portugues = pygame.Rect((365, 504), (363, 65))
     rect_ingles = pygame.Rect((365, 568), (363, 65))

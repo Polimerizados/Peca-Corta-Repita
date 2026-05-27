@@ -3,6 +3,7 @@ from pygame.locals import *
 from Particoes.classes import bolinhas, Botao
 from Particoes.fases import rodar_fase
 from Particoes.musica import tocar_musica
+from config import resource_path
 
 
 def abrir_dificuldades(screen, clock):
@@ -14,19 +15,19 @@ def abrir_dificuldades(screen, clock):
 
     # Carregando Assets
     bolinhas_bg = [bolinhas() for _ in range(100)]
-    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 93)
+    fonte = pygame.font.Font(resource_path("Fontes/gliker-regular.ttf"), 93)
     titulo = fonte.render("Selecione a dificuldade", True, (0, 0, 0))
     titulo_pos = ((window_width-titulo.get_width())/2, 170-titulo.get_height())
 
     # Botões
-    facil = Botao((360, 371), (65, 235), "botao_facil", fator_hover=1.111, texto="Fácil", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, ancora_texto=(0.5, 0.94))
-    medio = Botao((360, 371), (462, 235), "botao_medio", fator_hover=1.111, texto="Médio", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, ancora_texto=(0.5, 0.94))
-    dificil = Botao((360, 371), (856, 235), "botao_dificil", fator_hover=1.111, texto="Difícil", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, ancora_texto=(0.5, 0.94))
-    voltar = Botao((210, 75), (50, 680), cor=(244, 244, 244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
+    facil = Botao((360, 371), (65, 235), "botao_facil", fator_hover=1.111, texto="Fácil", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=58, ancora_texto=(0.5, 0.94))
+    medio = Botao((360, 371), (462, 235), "botao_medio", fator_hover=1.111, texto="Médio", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=58, ancora_texto=(0.5, 0.94))
+    dificil = Botao((360, 371), (856, 235), "botao_dificil", fator_hover=1.111, texto="Difícil", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=58, ancora_texto=(0.5, 0.94))
+    voltar = Botao((210, 75), (50, 680), cor=(244, 244, 244), fator_hover=1.185, texto="Voltar", nome_fonte=resource_path("Fontes/gliker-regular.ttf"), tamanho_fonte=33, borda=5)
 
     # Música
     if not pygame.mixer.music.get_busy():
-        tocar_musica("musicas/macacos_me_mordam.wav")
+        tocar_musica(resource_path("musicas/macacos_me_mordam.wav"))
 
     ########### WHILE ############
     ticking = 60

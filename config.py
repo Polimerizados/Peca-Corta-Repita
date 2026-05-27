@@ -1,4 +1,4 @@
-import socket, threading, json, time, os
+import socket, threading, json, time, os, sys
 import config
 import pygame
 
@@ -57,6 +57,14 @@ def save_leaderboard():
         s = json.dumps(data, ensure_ascii=False, indent=2)
         _atomic_write(_LEADERBOARD_FILE, s)
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 def load_leaderboard():
     global lista_dados_f, lista_dados_m, lista_dados_d
     if not os.path.exists(_LEADERBOARD_FILE):
@@ -72,3 +80,5 @@ def load_leaderboard():
             print("Erro ao carregar leaderboard:", e)
 
 load_leaderboard()
+
+

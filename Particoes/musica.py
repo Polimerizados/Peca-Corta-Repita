@@ -1,6 +1,6 @@
 from pygame import mixer
 import config
-
+from config import resource_path
 
 def tocar_musica(musica):
     if config.musica_on:
@@ -10,7 +10,7 @@ def tocar_musica(musica):
 
         mixer.music.play() # Toca a música
 
-som_hover = mixer.Sound("musicas/som.mp3") # Carrega o efeito sonoro
+som_hover = mixer.Sound(resource_path("musicas/som.mp3")) # Carrega o efeito sonoro
 
 def tocar_som(som):
     if config.som_on:
