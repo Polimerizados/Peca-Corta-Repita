@@ -1,4 +1,5 @@
 import pygame, sys, random, os
+import math
 from pygame.locals import *
 from Particoes.classes import dNTP, ligH, dP, bolinhas, polimerase
 from Particoes.musica import tocar_musica
@@ -65,6 +66,21 @@ def rodar_fase(dificuldade, screen, clock):
     musicas = ["(EXTRA) PATIFARIA ESPACIAL.ogg","GELEIA MICROBIOTICA.ogg", "PELAS BARBAS DO PROFETA.ogg"]
     musica_selecionada = random.choice(musicas)
     tocar_musica(f"musicas/{musica_selecionada}")
+
+    def escolher_base(dNTPs_livres):
+        """Escolhe uma base com probabilidade inversamente proporcional à raiz quadrada do número de bases atuais"""
+        # Contagem das bases
+        contagem = {"A": 0, "T": 0, "C": 0, "G": 0}
+        for d in dNTPs_livres:
+            if d.base in contagem:
+                contagem[d.base] += 1
+        
+        # Ajuste dos pesos
+        bases = ["A", "T", "C", "G"]
+        pesos = [1 / math.sqrt(contagem[b] + 1) for b in bases]  # +1 evita divisão por zero
+        base_escolhida = random.choices(bases, weights=pesos, k=1)[0]
+        print(contagem, base_escolhida)
+        return base_escolhida
 
     ########### WHILE ############
     clicado_index = ""
@@ -154,22 +170,22 @@ def rodar_fase(dificuldade, screen, clock):
              # PACMAN dNTPs
             if cada_dntp.pos[0] < -130:
                 dNTPs_livres.pop(i)
-                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(window_width + 10, random.randint(0, window_height-100)))
+                novo_dNTP = dNTP(dificuldade, "down", base=escolher_base(dNTPs_livres), pos=(window_width + 10, random.randint(0, window_height-100)))
                 dNTPs_livres.insert(i, novo_dNTP)
 
             elif cada_dntp.pos[0] > window_width + 30:
                 dNTPs_livres.pop(i)
-                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(-90, random.randint(0, window_height-100)))
+                novo_dNTP = dNTP(dificuldade, "down", base=escolher_base(dNTPs_livres), pos=(-90, random.randint(0, window_height-100)))
                 dNTPs_livres.insert(i, novo_dNTP)
 
             elif cada_dntp.pos[1] < -130:
                 dNTPs_livres.pop(i)
-                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(random.randint(0, window_width-80), window_height + 10))
+                novo_dNTP = dNTP(dificuldade, "down", base=escolher_base(dNTPs_livres), pos=(random.randint(0, window_width-80), window_height + 10))
                 dNTPs_livres.insert(i, novo_dNTP)
 
             elif cada_dntp.pos[1] > window_height + 30:
                 dNTPs_livres.pop(i)
-                novo_dNTP = dNTP(dificuldade, "down", base="random", pos=(random.randint(0, window_width-80), -110))
+                novo_dNTP = dNTP(dificuldade, "down", base=escolher_base(dNTPs_livres), pos=(random.randint(0, window_width-80), -110))
                 dNTPs_livres.insert(i, novo_dNTP)
 
             # Mantém o dNTP sob o mouse
@@ -237,7 +253,9 @@ def rodar_fase(dificuldade, screen, clock):
                 # Identifica se clicou no botão de pause
                 if pause_rect.collidepoint(event.pos):
                     from Particoes.pause import pausar
+                    t_antes = pygame.time.get_ticks()
                     running = pausar(screen, clock)
+                    tempo_total += pygame.time.get_ticks() - t_antes
                     
                     if not running:
                         pygame.mixer.music.stop()
@@ -270,7 +288,7 @@ def rodar_fase(dificuldade, screen, clock):
                                         "down"
                                     )
                                 dNTPs_livres.pop(clicado_index)
-                                dNTPs_livres.append(dNTP(dificuldade, "down"))
+                                dNTPs_livres.append(dNTP(dificuldade, "down", base=escolher_base(dNTPs_livres)))
                                 scroll_ticks_max = pol.scrolling_ticks
                                 scroll_vel = pol.scrolling
                                 qnt_ticks_max += 1
@@ -288,7 +306,9 @@ def rodar_fase(dificuldade, screen, clock):
                     abrir_dificuldades(screen, clock)
                 if event.key == K_p: # P (pause)
                     from Particoes.pause import pausar
+                    t_antes = pygame.time.get_ticks()
                     running = pausar(screen, clock)
+                    tempo_total += pygame.time.get_ticks() - t_antes
                     if not running:
                         from Particoes.menu import abrir_menu
                         abrir_menu(screen, clock)

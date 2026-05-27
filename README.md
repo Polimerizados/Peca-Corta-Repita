@@ -1,5 +1,5 @@
-# 🔬 Peça, Corta, Repita
-> O Peça, Corta, Repita é um jogo onde você atua com a DNA polimerase de uma reação de PCR. Aqui, você vai lutar contra o tempo para parear o máximo de bases possíveis e subir no leaderboard!
+# 🔬 Pesque, Conecte e Repita
+> O Pesque, Conecte e Repita é um jogo onde você atua com a DNA polimerase de uma reação de PCR. Aqui, você vai lutar contra o tempo para parear o máximo de bases possíveis e subir no leaderboard!
 
 <!------------------------------------>
 
@@ -7,7 +7,7 @@
 
 # 📝 Descrição
 
-No Peça, Corta, Repita, você terá que:
+No Pesque, Conecte e Repita, você terá que:
 
 - Reconhecer as bases complementares do DNA;
 

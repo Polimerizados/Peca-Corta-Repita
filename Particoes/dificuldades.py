@@ -14,12 +14,14 @@ def abrir_dificuldades(screen, clock):
 
     # Carregando Assets
     bolinhas_bg = [bolinhas() for _ in range(100)]
-    titulo = pygame.image.load(f"Imagens/titulo_dificuldade.png")
+    fonte = pygame.font.Font("Fontes/gliker-regular.ttf", 93)
+    titulo = fonte.render("Selecione a dificuldade", True, (0, 0, 0))
+    titulo_pos = ((window_width-titulo.get_width())/2, 170-titulo.get_height())
 
     # Botões
-    facil = Botao((360, 371), (65, 235), "botao_facil", fator_hover=1.111)
-    medio = Botao((360, 371), (462, 235), "botao_medio", fator_hover=1.111)
-    dificil = Botao((360, 371), (856, 235), "botao_dificil", fator_hover=1.111)
+    facil = Botao((360, 371), (65, 235), "botao_facil", fator_hover=1.111, texto="Fácil", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, ancora_texto=(0.5, 0.94))
+    medio = Botao((360, 371), (462, 235), "botao_medio", fator_hover=1.111, texto="Médio", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, ancora_texto=(0.5, 0.94))
+    dificil = Botao((360, 371), (856, 235), "botao_dificil", fator_hover=1.111, texto="Difícil", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=58, ancora_texto=(0.5, 0.94))
     voltar = Botao((210, 75), (50, 680), cor=(244, 244, 244), fator_hover=1.185, texto="Voltar", nome_fonte="Fontes/gliker-regular.ttf", tamanho_fonte=33, borda=5)
 
     # Música
@@ -54,7 +56,7 @@ def abrir_dificuldades(screen, clock):
         medio.desenhar(screen)
         dificil.desenhar(screen)
         voltar.desenhar(screen)
-        screen.blit(titulo,(140, 50))
+        screen.blit(titulo, titulo_pos)
 
         ## EVENTOS
         for event in pygame.event.get():
